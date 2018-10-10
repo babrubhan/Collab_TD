@@ -96,7 +96,7 @@ oApp.configure(function()
         }
         
         var sDocumentID = req.params['DocumentID'];
-        console.log(sDocumentID);
+        //console.log(sDocumentID);
         if (sDocumentID in g_oEditSessions)
         {
             send(g_oEditSessions[sDocumentID].getDocument());
@@ -166,7 +166,7 @@ oApp.configure(function()
         if (sDocumentID in g_oEditSessions)
         {
             oDocument = g_oEditSessions[sDocumentID].getDocument();
-            console.log(oDocument);
+            //console.log(oDocument);
             // TODO: Determine correct line-ending client-side.
             res.send(oDocument.get('aLines').join('\r\n'));
         }
