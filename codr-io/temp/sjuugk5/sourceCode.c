@@ -1,6 +1,5 @@
 #include <stdio.h>
-
 int main(){
-    printf("test case 24..");
+    printf("testCaseFake12");
     return 0;
 }

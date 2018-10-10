@@ -223,7 +223,7 @@ oApp.get('/fullStat' , function(req , res ){
     });
 });    */
 //Compiler code end.....................................................................................................
-
+/*
 //----------------------------------------------------------------------------------------------------------------------
 
   oApp.post('/compilecode' , function (req , res ) {
@@ -290,6 +290,81 @@ oApp.get('/fullStat' , function(req , res ){
 
 
 //----------------------------------------------------------------------------------------------------------------------
+//Compiler code starts               
+oApp.post('/compilecode' , function (req , res ) {
+      var oDocument;
+      var code;
+      var sDocumentID = req.body.docID;
+
+      if (sDocumentID in g_oEditSessions) {
+          oDocument = g_oEditSessions[sDocumentID].getDocument();
+          code = oDocument.get('aLines').join('\r\n');
+      };
+
+      cFilepath = './temp/' + sDocumentID + '/';                            //Source code directory file path
+
+      oFS.exists( cFilepath, function(exists){                              //Creating the temp folder if it doesn't exists
+          if(!exists)
+          {
+              console.log('INFO: ' + sDocumentID + ' directory created for storing temporary sourceCode I/O files.' );
+              oFS.mkdirSync(cFilepath);
+          }
+          
+          oFS.writeFile(cFilepath + 'sourceCode.c', code, function(err) {        //creating the seperate folder for each client by using the client-id
+              if(err){
+                  return console.log(err);
+              }
+              //Docker conatiner code starts
+                  var Docker = require('dockerode');
+                  var docker = new Docker({socketPath: '/var/run/docker.sock'});
+                  
+                  var dPaths = { bind: ['/root/working_project/Collab_TD/codr-io:/src']
+                               };
+                               
+                  var codeFile = '/src/temp/' + sDocumentID + '/sourceCode.c';
+                  var outputFile = '/src/temp/' + sDocumentID + '/sourceCode';
+                  
+                  var dCommands = { compile: ['gcc', codeFile, '-o', outputFile],
+                                    run : [outputFile],
+                                    debug: ['ls','-l','/src/temp/'+sDocumentID]
+                                  };
+                                                     
+                  docker.run('gccbox', dCommands.compile, process.stdout, {
+                    'Volumes': {
+                      '/src': {}
+                    },
+                    'Hostconfig': {
+                      'Binds': dPaths.bind,
+                    }
+                  }, function (err, data, container) {
+                      if (err) {
+                          console.log("Error", err);
+                      } else {
+                          docker.run('gccbox', dCommands.run, process.stdout, {
+                            'Volumes': {
+                              '/src': {}
+                              },
+                            'Hostconfig': {
+                            'Binds': dPaths.bind,
+                            }
+                            }, function (err, data, container) {
+                                if (err) {
+                                  console.log("Error", err);
+                                }else {
+                                    //oApp.get('/compilecode', function(req, res){
+                                      console.log(data.StatusCode);
+                                      //res.send(data);
+                                   // });
+                                }
+                            });
+                          }
+                      });
+              //Docker container code ends
+              });
+          });
+    });
+//Compiler code ends
+//-----------------------------------------------------------------------------------------------------------------------
 
 // Instantiate server.
 var oServer = oHTTP.createServer(oApp);

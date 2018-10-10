@@ -181,13 +181,13 @@ window.addEventListener('load', function()
 //Compile Button
 function btnCompile() {
     var sDocumentID = /^(\/v)?\/([a-z0-9]+)\/?$/.exec(document.location.pathname)[2];
-    //console.log(sDocumentID);
     $.ajax({
         type: 'POST',
         url: '/compilecode',
         data: { docID: sDocumentID},
-        success: function() {
-            //alert("post ajax btnCompile..!");
+        success: function(data) {
+            //$.get('http://sdl30287.labs.teradata.com:8020/compilecode', function(data){
+                //  console.log(data);
         },
         error: console.error
     });

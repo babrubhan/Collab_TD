@@ -17,8 +17,10 @@
   "dependencies": {
     "amdefine": ">=0.1.0",
     "axios": "^0.18.0",
+    "body-parser": "^1.18.3",
     "compile-run": "^2.1.2",
     "connect": "2.9.0",
+    "dockerode": "^2.5.7",
     "express": "^3.21.2",
     "less": "1.4.x",
     "less-middleware": "~0.1.10",
