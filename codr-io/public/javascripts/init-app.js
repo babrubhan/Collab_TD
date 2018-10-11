@@ -185,9 +185,8 @@ function btnCompile() {
         type: 'POST',
         url: '/compilecode',
         data: { docID: sDocumentID},
-        success: function(data) {
-            //$.get('http://sdl30287.labs.teradata.com:8020/compilecode', function(data){
-                //  console.log(data);
+        success: function(response) {
+             console.log(response);
         },
         error: console.error
     });
