@@ -20,7 +20,7 @@ g_oConfig = (function()
     // Populate Config object.
     var oConfig = {};
     oConfig.bIsProd   =  (oArgs.is_prod == '1');
-    oConfig.iPort     =  (oArgs.port      ? parseInt(oArgs.port) : (oConfig.bIsProd ? 80 : 8080));
+    oConfig.iPort     =  (oArgs.port      ? parseInt(oArgs.port) : (oConfig.bIsProd ? 80 : 8020));
     oConfig.sDataPath =  (oArgs.data_path ? oArgs.data_path : function()
                             {
                                 if (oConfig.bIsProd)

@@ -186,7 +186,11 @@ function btnCompile() {
         url: '/compilecode',
         data: { docID: sDocumentID},
         success: function(response) {
-             console.log(response);
+       
+          alert(response.userStatus);
+          alert(response.compileStatus);
+          
+            // console.log(response);
         },
         error: console.error
     });
@@ -200,12 +204,15 @@ function btnRun() {
         url: '/runcode',
         data: { docID: sDocumentID},
         success: function(response) {
-             console.log(response);
+        
+          alert(response.userStatus);
+          alert(response.compileStatus);
+          
+            // console.log(response);
         },
         error: console.error
     });
 }
-
 
 // Start App.
 require(['init-app'], function(fnInitApp)
