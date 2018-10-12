@@ -211,7 +211,7 @@ var isCompiled = false;
           oFS.writeFile(cFilepath + 'sourceCode.c', code, function(err) {        //creating the seperate folder for each client by using the client-id
               if(err){
                   res.send({
-                        compileStatus: err,
+                        compileStatus: JSON.stringify(err),
                         userStatus
                       });
                 }
@@ -241,7 +241,7 @@ var isCompiled = false;
                       }, function (err, data, container) {
                           if (err) {
                               res.send({
-                                  compileStatus: err,
+                                  compileStatus: JSON.stringify(err),
                                   userStatus
                                 });
                             } 
@@ -284,7 +284,7 @@ var isCompiled = false;
           oFS.writeFile(cFilepath + 'sourceCode.c', code, function(err) {        //creating the seperate folder for each client by using the client-id
               if(err){
                   res.send({
-                      compileStatus: err,
+                      compileStatus: JSON.stringify(err),
                       userStatus
                       });
                   }
@@ -315,7 +315,7 @@ var isCompiled = false;
                       }, function (err, data, container) {
                           if (err) {
                               res.send({
-                                  compileStatus: err,
+                                  compileStatus: JSON.stringify(err),
                                   userStatus
                                 });
                               } 
@@ -331,7 +331,7 @@ var isCompiled = false;
                                   }, function (err, data, container) {
                                       if (err) {
                                           res.send({
-                                              compileStatus: err,
+                                              compileStatus: JSON.stringify(err),
                                               userStatus
                                             });
                                         }
@@ -340,7 +340,7 @@ var isCompiled = false;
                                           oFS.readFile(data.LogPath, 'utf8', function(err,data){                //reading log file(JSON) for the output, 
                                             if(err){                                                              //another way to do this is by using docker stream
                                               res.send({
-                                                  compileStatus: err,
+                                                  compileStatus: JSON.stringify(err),
                                                   userStatus
                                                 });
                                               }
