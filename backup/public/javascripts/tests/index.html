@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Calculator</title>
+		<script type="text/javascript" 
+
+		src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>
+		<script type="text/javascript" src="calculator.js"></script>
+	</head>
+	<body>
+		<label for="number_a">Number 1:</label>
+		<input type="text" id="number_a"><br>
+		<label for="number_b">Number 2:</label>
+		<input type="text" id="number_b"><br>
+		<label for="operation">Operation:</label>
+		<select name="operation" id="operation">
+			<option value="+">+</option>
+			<option value="-">-</option>
+			<option value="*">*</option>
+			<option value="/">/</option>
+		</select>
+		<button onclick="getResult();">Calculate</button><br>
+		<label for="result">Results:</label>
+		<input id="result">
+		<hr>
+		<div id="validation"></div>
+		<script type="text/javascript">
+			function getResult () {
+				var a = $('#number_a').val();
+				var b = $('#number_b').val();
+				var op = $('#operation').val();
+				var result = calculate(a, b, op);
+				$('#result').val(result);
+			}
+		</script>
+	</body>
+</html> 
