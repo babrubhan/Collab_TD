@@ -7,8 +7,6 @@
         <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300' rel='stylesheet' type='text/css'>
         <link rel=StyleSheet href="/stylesheets/index.css" type="text/css" />
 
-      <!--  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.2/jquery.min.js"></script> <!-- Compile post function script -->
-
     </head>
     <body class="hidden">
 
@@ -108,11 +106,11 @@
                     <div id="html-tools-btn" tabindex="0"  style="outline: none;">
                         HTML Tools <span class="icon-angle-down"></span><span class="icon-angle-up"></span>
                     </div>
-                    <div style="margin-left:800px;">
-                        <!--<form id="myform" name="myform" method="post" action="compilecode">
-                            <button type="button" onclick="btnCompile()">compile</button>
-                        </form>-->
+                    <div class="comiple-btn" style="margin-left:30px;">
                         <button type="button" onclick="btnCompile()">compile</button>
+                    </div>
+                    <div class="run-btn" style="margin-left:700px;">
+                        <button type="button" onclick="btnRun()">Run</button>
                     </div>
                     <!-- Num Viewing Box-->
                     <div id="toolbar-content-right">
@@ -481,20 +479,6 @@
             }
         })();
         </script>
-    <!--<script>
-        $('button').on('click', function() {
-            $.ajax({
-                type: 'POST',
-                url: '/compilecode',
-                data: { },
-                type: "POST",
-                success: function(resultData) {
-                alert('heyyyyyyyy');
-                },
-                error: console.error
-            });
-        });
-    </script>-->
     </body>
 </html>
 

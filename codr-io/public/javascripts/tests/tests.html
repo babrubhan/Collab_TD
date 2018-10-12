@@ -1,0 +1,63 @@
+<!--<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>QUnit Tests</title>
+    <script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
+    <link rel="stylesheet" href="http://code.jquery.com/qunit/qunit-1.14.0.css">
+    <script src="http://code.jquery.com/qunit/qunit-1.14.0.js"></script>
+</head>
+<body>
+    <div id="qunit"></div>
+    <div id="qunit-fixture"></div>
+    <input id='btnSubmit' type='button' hidden='hidden'/>
+    <script>
+QUnit.test("foo", function (assert) {
+            $("#foo").trigger("click");
+            //assertions...       
+});
+-->
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>
+			Calculator Tests
+		</title>
+		<!--jquery and qunit files-->
+		<script type="text/javascript" 
+
+		src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>
+		<script type="text/javascript" 
+
+		src="http://code.jquery.com/qunit/qunit-1.12.0.js"></script>
+		<link rel="stylesheet" 
+
+		type="text/css" href="http://code.jquery.com/qunit/qunit-1.12.0.css">
+		<!--include the file we are testing along with its test file-->
+		<script type="text/javascript" src="calculator.js"></script>
+		<script type="text/javascript" src="tests.js"></script>
+	</head>
+	<body>
+		<!--Test results will go here-->
+		<div id="qunit"></div>
+		<!--
+			* Required html elements that need to be present when running the tests
+			* Values in html elements are reset to their default values 
+                        * before each individual tests
+		-->
+		<div id="qunit-fixture">
+			<input type="text" id="number_a">
+			<input type="text" id="number_b">
+			<select name="operation" id="operation">
+				<option value="+">+</option>
+				<option value="-">-</option>
+				<option value="*">*</option>
+				<option value="/">/</option>
+			</select>
+			<input id="result">
+			<div id="validation"></div>
+		</div>
+	</body>
+</html>

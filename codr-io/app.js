@@ -290,20 +290,11 @@ oApp.get('/fullStat' , function(req , res ){
           console.log(`stdout: ` + stdout);
           console.log(`stderr: ` + stderr);
       });*/
-
-
-//----------------------------------------------------------------------------------------------------------------------
-//Compiler code starts     
-/*oApp.post('/compilecode' , function (req , res ) {
-      var sDocumentID = req.body.docID;
-      console.log(sDocumentID);
-       res.send(JSON.stringify("2345678"));
-               
-                    
-});
-});
-   */       
-oApp.post('/compilecode' , function (req , res ) {
+ 
+//Compiler code starts
+var isCompiled = false;          
+  oApp.post('/compilecode' , function (req , res ) {
+      isCompiled = false;
       var oDocument;
       var code;
       var sDocumentID = req.body.docID;
@@ -326,7 +317,7 @@ oApp.post('/compilecode' , function (req , res ) {
               if(err){
                   return console.log(err);
               }
-              //Docker conatiner code starts
+              //Docker conatiner
                   var Docker = require('dockerode');
                   var stream = require('stream');
                   var docker = new Docker({socketPath: '/var/run/docker.sock'});
@@ -340,9 +331,8 @@ oApp.post('/compilecode' , function (req , res ) {
                   
                   var dCommands = { compile: ['gcc', codeFile, '-o', outputFile],
                                     run : [outputFile],
-                                    debug: ['ls','-l','/src/temp/'+sDocumentID],
-                                  };
-                                                     
+                                    debug: ['ls','-l','/src/temp/'+sDocumentID],            
+                                  };                                
                   docker.run(dImage, dCommands.compile, process.stdout, {
                     'Volumes': {
                       '/src': {}
@@ -355,38 +345,85 @@ oApp.post('/compilecode' , function (req , res ) {
                               console.log("Error", err);
                               } 
                           else {
-                              docker.run('gccbox', dCommands.run, process.stdout, {
-                              'Volumes': {
-                              '/src': {}
-                                },
-                              'Hostconfig': {
-                              'Binds': dPaths.bind,
-                                  }
-                                  }, function (err, data, container) {
-                                      if (err) {
-                                          console.log("Error", err);
-                                      }else {
-                                         container.inspect(function (err, data) {
-                                          oFS.readFile(data.LogPath, 'utf8', function(err,data){
-                                          if(err){
-                                              console.log(err);
-                                              }
-                                          var objJSON = JSON.parse(data);
-                                          var dResult = objJSON.log;
-                                          res.send(dResult);
-                                              //JSON.stringify
-                                            });
-                                         });
-                                  }
-                               });
+                              isCompiled = true;
+                              res.send("Compilation OK");
                             }
                       });
-              //Docker container code ends
               });
           });
     });
-//Compiler code ends
-//-----------------------------------------------------------------------------------------------------------------------
+
+//Run compiled code
+  oApp.post('/runcode' , function (req , res ) {
+      if(!isCompiled){
+          res.send("Code is not Compiled || Compilation Error");
+        }
+      var oDocument;
+      var code;
+      var sDocumentID = req.body.docID;
+
+      if (sDocumentID in g_oEditSessions) {
+          oDocument = g_oEditSessions[sDocumentID].getDocument();
+          code = oDocument.get('aLines').join('\r\n');
+      };
+
+      cFilepath = './temp/' + sDocumentID + '/';                            //Source code directory file path
+
+      oFS.exists( cFilepath, function(exists){                              //Creating the temp folder for storing the client files if it doesn't exists
+          if(!exists)
+          {
+              console.log('INFO: ' + sDocumentID + ' directory created for storing temporary sourceCode I/O files.' );
+              oFS.mkdirSync(cFilepath);
+          }
+          
+          oFS.writeFile(cFilepath + 'sourceCode.c', code, function(err) {        //creating the seperate folder for each client by using the client-id
+              if(err){
+                  return console.log(err);
+              }
+              //Docker conatiner
+                  var Docker = require('dockerode');
+                  var stream = require('stream');
+                  var docker = new Docker({socketPath: '/var/run/docker.sock'});
+                  
+                  var dPaths = { bind: ['/root/working_project/Collab_TD/codr-io:/src']
+                               };
+                               
+                  var dImage = 'gccbox';           
+                  var codeFile = '/src/temp/' + sDocumentID + '/sourceCode.c';
+                  var outputFile = '/src/temp/' + sDocumentID + '/sourceCode';
+                  
+                  var dCommands = { compile: ['gcc', codeFile, '-o', outputFile],
+                                    run : [outputFile],
+                                    debug: ['ls','-l','/src/temp/'+sDocumentID],            
+                                  };              
+                    docker.run('gccbox', dCommands.run, process.stdout, {
+                      'Volumes': {
+                      '/src': {}
+                        },
+                      'Hostconfig': {
+                      'Binds': dPaths.bind,
+                        }
+                        }, function (err, data, container) {
+                            if (err) {
+                                console.log("Error", err);
+                                }
+                            else {
+                                container.inspect(function (err, data) {
+                                oFS.readFile(data.LogPath, 'utf8', function(err,data){                //reading log file(JSON) for the output, 
+                                if(err){                                                              //another way to do this is by using docker stream
+                                    console.log(err);
+                                    }
+                                var objJSON = JSON.parse(data);
+                                var dResult = objJSON.log;
+                                res.send(dResult);                                                  //server response to the client side
+                                //JSON.stringify
+                                });
+                            });
+                          }
+                      });
+                  });
+          });
+      });
 
 // Instantiate server.
 var oServer = oHTTP.createServer(oApp);
