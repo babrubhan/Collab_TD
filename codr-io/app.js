@@ -184,7 +184,7 @@ oApp.configure(function()
 var userStatus = "Idle";
 var isCompiled = false;  
 
-/* compiling file */    
+/* compiling file*/    
   oApp.post('/compilecode' , function (req , res ) {
      
       isCompiled = false;
@@ -258,7 +258,7 @@ var isCompiled = false;
           });
     });
 
- /* Run compiled code */
+ /* Running file */
   oApp.post('/runcode' , function (req , res ) {
   
       userStatus = "Executing";
