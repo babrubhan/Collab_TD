@@ -34,8 +34,8 @@ define('app-main', function(require)
                 (sEventType == 'click'   && jTarget.is('#title-save')))
             {
                 this._setTitleToLocal();
-              // var fs = document.getElementById("title-save").value;
-                //alert(fs);
+               var fs = document.getElementById("title-save").value;
+                alert(fs);
                 oEvent.preventDefault();
             }
         },
@@ -629,6 +629,7 @@ define('app-main', function(require)
         new Dropdown('#toolbar-item-html-preview-dock',              oHtmlPreviewDockDropdownUIHandler);
         new Dropdown('#toolbar-item-html-preview-refresh-frequency', oHtmlPreviewRefreshFrequencyUIHandler);
         new Dropdown('#toolbar-item-fork');
+        new Dropdown('#toolbar-item-compile');
         
         // Register other UI handlers.
         oUIDispatch.registerUIHandler(oHtmlPreviewPopupUIHandler);
@@ -641,6 +642,7 @@ define('app-main', function(require)
         oKeyShortcutHandler.registerShortcut('L', $('#toolbar-item-mode'),      -15);
         oKeyShortcutHandler.registerShortcut('D', $('#toolbar-item-download'),  12);
         oKeyShortcutHandler.registerShortcut('F', $('#toolbar-item-fork'),      12);
+        oKeyShortcutHandler.registerShortcut('X', $('#toolbar-item-compile'),   12);
         if (!bIsSnapshot)
         {
             oKeyShortcutHandler.registerShortcut('C', $('#toolbar-item-chat'),  12);

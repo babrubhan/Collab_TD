@@ -175,7 +175,7 @@ window.addEventListener('load', function()
         {
             window.location.reload();
         });
-    }, 0);
+    }, );
 });
 
 //Compile Button
