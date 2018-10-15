@@ -11,6 +11,8 @@ QUnit.test('isEven()', function(assert) {
 })
 */
 
+
+//Ajax req res testing
 var jsdom = require('jsdom');
 const { JSDOM } = jsdom;
 const { window } = new JSDOM();
@@ -20,8 +22,6 @@ global.document = document;
 var $ = jQuery = require('jquery')(window);
 
 var sinon = require('sinon');
-
-
 
 QUnit.module('Compile-Run', {
   before: function () {
@@ -62,12 +62,25 @@ function getTheValues() {
   });
 }
 
+//Docker testing
+QUnit.test("Docker Compiler", function (assert) {
 
+});
 
-
-
-
-
-
-
-
+function useDocker(){
+     var Docker = require('dockerode');
+     var docker = new Docker({socketPath: '/var/run/docker.sock'});     
+     var dPaths = { bind: ['/root/working_project/Collab_TD/codr-io/public/javascripts/test:/src'] };           
+                                                   
+       docker.run(dImage, dCommands.compile, process.stdout, {
+       'Volumes': {
+       '/src': {}
+         },
+       'Hostconfig': {
+       'Binds': dPaths.bind,
+           }
+       }, function (err, data, container) {
+                                 
+         }
+       );
+}
