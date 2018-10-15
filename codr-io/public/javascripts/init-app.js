@@ -187,10 +187,9 @@ function btnCompile() {
         data: { docID: sDocumentID},
         success: function(response) {
        
-          alert(response.userStatus);
-          alert(response.compileStatus);
+         alert(response.userStatus);
+         alert(response.compileStatus);
           
-            // console.log(response);
         },
         error: console.error
     });

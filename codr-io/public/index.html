@@ -121,10 +121,10 @@
                     <div class="divider"></div>
                     
                     <!-- --------------------------------------------------------------------------------------------------       -->
-                    <div class="comiple-btn" style="margin-left:50px;">
-                        <button type="button" onclick="btnCompile()">compile</button>
+                    <div id="DisplayDiv" class="anyDiv" style="margin-left:50px;">
+                        <button type="button" onclick="btnCompile()">Compile</button>
                     </div>
-                    <div class="run-btn" style="margin-left:400px;">
+                    <div class="run-btn" style="margin-left:50px;">
                         <button type="button" onclick="btnRun()">Run</button>
                     </div>
                     <!-- Num Viewing Box-->
@@ -134,6 +134,15 @@
                             <div id="num-viewing-caption" class="toolbar-item-caption">Viewing</div>
                             <div class="horizontal-divider"></div>
                             <div id="num-viewing"></div>
+                        </div>
+                    </div>
+                    <!-- Status-code -->
+                    <div id="toolbar-content-right">
+                        <div class="divider"></div>
+                        <div id="status-box">
+                            <div id="num-viewing-caption" class="toolbar-item-caption">Status</div>
+                            <div class="horizontal-divider"></div>
+                            <div id="status-state"></div>
                         </div>
                     </div>
                 </div>

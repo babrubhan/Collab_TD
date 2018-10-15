@@ -250,7 +250,7 @@ var isCompiled = false;
                               
                               res.send({
                                   compileStatus: "Compilation Ok",
-                                  userStatus: "Compiling"
+                                  userStatus
                               });
                             }
                       });
