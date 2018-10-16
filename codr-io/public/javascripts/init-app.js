@@ -186,21 +186,19 @@ function btnCompile() {
         url: '/compilecode',
         data: { docID: sDocumentID},
         success: function(response) {
-      // setStatusState(response.userStatus);
-         $('#status-state').text(response.uStatusState);
-//	       alert(response.userStatus);
-	 $('#compiler-state').text(response.compilerState);
-  //       alert(response.compilerState);
+         $('#status-state').text(response.uStatusState);	      
+	 $('#compiler-state').text(response.compilerState);   
         },
+
         error: console.error
     });
+	$(document).ajaxComplete(function(){
+        setTimeout(function(){
+	var updateStatusState = 'Idle';
+	$("#status-state").text(updateStatusState);
+	},5000);
+      });
 }
-
-/*function setSatusState(uState)
-       	{
-	    //var uState = 'Compiling';
-            $('#status-state').text(uState);
-        }*/
 
 
 //Run Button
@@ -213,11 +211,16 @@ function btnRun() {
         success: function(response) {
         $('#status-state').text(response.uStatusState);
 	$('#executes-output').text(response.compilerState);
-       //   alert(response.userStatus);
-        //  alert(response.compilerState);
         },
         error: console.error
     });
+	$(document).ajaxComplete(function(){
+        setTimeout(function(){
+        var updateStatusState = 'Idle';
+        $("#status-state").text(updateStatusState);
+        },5000);
+      });
+
 }
 
 // Start App.
