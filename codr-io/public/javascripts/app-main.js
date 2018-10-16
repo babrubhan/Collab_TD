@@ -630,6 +630,7 @@ define('app-main', function(require)
         new Dropdown('#toolbar-item-html-preview-refresh-frequency', oHtmlPreviewRefreshFrequencyUIHandler);
         new Dropdown('#toolbar-item-fork');
         new Dropdown('#toolbar-item-compile');
+         new Dropdown('#toolbar-item-run');
         
         // Register other UI handlers.
         oUIDispatch.registerUIHandler(oHtmlPreviewPopupUIHandler);
@@ -643,6 +644,7 @@ define('app-main', function(require)
         oKeyShortcutHandler.registerShortcut('D', $('#toolbar-item-download'),  12);
         oKeyShortcutHandler.registerShortcut('F', $('#toolbar-item-fork'),      12);
         oKeyShortcutHandler.registerShortcut('X', $('#toolbar-item-compile'),   12);
+        oKeyShortcutHandler.registerShortcut('X', $('#toolbar-item-run'),   12);
         if (!bIsSnapshot)
         {
             oKeyShortcutHandler.registerShortcut('C', $('#toolbar-item-chat'),  12);

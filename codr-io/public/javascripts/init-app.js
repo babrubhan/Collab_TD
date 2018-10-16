@@ -188,9 +188,9 @@ function btnCompile() {
         success: function(response) {
       // setStatusState(response.userStatus);
          $('#status-state').text(response.uStatusState);
-//	 alert(response.userStatus);
+//	       alert(response.userStatus);
+	 $('#compiler-state').text(response.compilerState);
   //       alert(response.compilerState);
- 
         },
         error: console.error
     });
@@ -212,10 +212,9 @@ function btnRun() {
         data: { docID: sDocumentID},
         success: function(response) {
         $('#status-state').text(response.uStatusState);
+	$('#executes-output').text(response.compilerState);
        //   alert(response.userStatus);
         //  alert(response.compilerState);
-          
-            // console.log(response);
         },
         error: console.error
     });
