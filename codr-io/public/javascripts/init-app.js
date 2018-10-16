@@ -186,14 +186,22 @@ function btnCompile() {
         url: '/compilecode',
         data: { docID: sDocumentID},
         success: function(response) {
-       
-         alert(response.userStatus);
-         alert(response.compileStatus);
-          
+      // setStatusState(response.userStatus);
+         $('#status-state').text(response.uStatusState);
+//	 alert(response.userStatus);
+  //       alert(response.compilerState);
+ 
         },
         error: console.error
     });
 }
+
+/*function setSatusState(uState)
+       	{
+	    //var uState = 'Compiling';
+            $('#status-state').text(uState);
+        }*/
+
 
 //Run Button
 function btnRun() {
@@ -203,9 +211,9 @@ function btnRun() {
         url: '/runcode',
         data: { docID: sDocumentID},
         success: function(response) {
-        
-          alert(response.userStatus);
-          alert(response.compileStatus);
+        $('#status-state').text(response.uStatusState);
+       //   alert(response.userStatus);
+        //  alert(response.compilerState);
           
             // console.log(response);
         },

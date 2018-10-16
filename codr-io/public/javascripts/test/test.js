@@ -35,7 +35,7 @@ QUnit.module('Compile-Run', {
 
 QUnit.test("Onclick Request-Response Calls", function (assert) {
   var callback = sinon.spy(jQuery, "ajax");
-  this.server.respondWith("GET", "/compileRun",
+  this.server.respondWith("POST", "/compileRun",
     [200, { "Content-Type": "application/json" },
       '[{ "id": 250053, "name": "Babru" }]']);
 

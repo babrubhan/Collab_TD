@@ -181,14 +181,14 @@ oApp.configure(function()
     });
 });
 
-var userStatus = "Idle";
+var uStatusState;
 var isCompiled = false;  
 
 /* compiling file*/    
   oApp.post('/compilecode' , function (req , res ) {
      
       isCompiled = false;
-      userStatus = "Compiling";
+      uStatusState = "Compiling";
       
       var oDocument;
       var code;
@@ -211,8 +211,8 @@ var isCompiled = false;
           oFS.writeFile(cFilepath + 'sourceCode.c', code, function(err) {        //creating the seperate folder for each client by using the client-id
               if(err){
                   res.send({
-                        compileStatus: JSON.stringify(err),
-                        userStatus
+                        compilerState: JSON.stringify(err),
+                        uStatusState
                       });
                 }
               //Docker conatiner
@@ -241,16 +241,16 @@ var isCompiled = false;
                       }, function (err, data, container) {
                           if (err) {
                               res.send({
-                                  compileStatus: JSON.stringify(err),
-                                  userStatus
+                                  compilerState: JSON.stringify(err),
+                                  uStatusState
                                 });
                             } 
                           else {
                               isCompiled = true;
                               
                               res.send({
-                                  compileStatus: "Compilation Ok",
-                                  userStatus
+                                  compilerState: "Compilation Ok",
+                                  uStatusState
                               });
                             }
                       });
@@ -261,7 +261,7 @@ var isCompiled = false;
  /* Running file */
   oApp.post('/runcode' , function (req , res ) {
   
-      userStatus = "Executing";
+      uStatusState = "Running";
  
       var oDocument;
       var code;
@@ -284,8 +284,8 @@ var isCompiled = false;
           oFS.writeFile(cFilepath + 'sourceCode.c', code, function(err) {        //creating the seperate folder for each client by using the client-id
               if(err){
                   res.send({
-                      compileStatus: JSON.stringify(err),
-                      userStatus
+                      compilerState: JSON.stringify(err),
+                      uStatusState
                       });
                   }
               //Docker conatiner
@@ -315,8 +315,8 @@ var isCompiled = false;
                       }, function (err, data, container) {
                           if (err) {
                               res.send({
-                                  compileStatus: JSON.stringify(err),
-                                  userStatus
+                                  compilerState: JSON.stringify(err),
+                                  uStatusState
                                 });
                               } 
                           else {
@@ -331,8 +331,8 @@ var isCompiled = false;
                                   }, function (err, data, container) {
                                       if (err) {
                                           res.send({
-                                              compileStatus: JSON.stringify(err),
-                                              userStatus
+                                              compilerState: JSON.stringify(err),
+                                              uStatusState
                                             });
                                         }
                                       else {
@@ -340,16 +340,16 @@ var isCompiled = false;
                                           oFS.readFile(data.LogPath, 'utf8', function(err,data){                //reading log file(JSON) for the output, 
                                             if(err){                                                              //another way to do this is by using docker stream
                                               res.send({
-                                                  compileStatus: JSON.stringify(err),
-                                                  userStatus
+                                                  compilerState: JSON.stringify(err),
+                                                  uStatusState
                                                 });
                                               }
                                             var objJSON = JSON.parse(data);
                                             var dResult = objJSON.log;
                                          
                                             res.send({
-                                                compileStatus: dResult,
-                                                userStatus
+                                                compilerState: dResult,
+                                                uStatusState
                                               });
                                          // res.send(dResult);              //JSON.stringify                      //server response to the client side
                                          

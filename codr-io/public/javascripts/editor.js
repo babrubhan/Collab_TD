@@ -113,7 +113,6 @@ define(function(require)
             
             // Update status bar.
             this._setPeopleViewing();
-            this._setStatusState();
             
             // Set initial selection.
             this._oCurSelectionRange = (
@@ -358,12 +357,6 @@ define(function(require)
                              .toggleClass('others-viewing', iNumViewers > 0);
         },
         
-        _setStatusState: function()
-        {
-           var uStatusState = "Idle";
-            var sText = uStatusState;
-            $('#status-state').text(sText);
-        },
         
         _onSelectionChange: function(oRange)
         {
