@@ -211,10 +211,11 @@ var isCompiled = false;
           oFS.writeFile(cFilepath + 'sourceCode.c', code, function(err) {        //creating the seperate folder for each client by using the client-id
               if(err){
                   res.send({
-                        compilerState: JSON.stringify(err),
+                        compilerState: 'bab(1): ' + JSON.stringify(err),
                         uStatusState
                       });
                 }
+	      else {
               //Docker conatiner
                   var Docker = require('dockerode');
                   var stream = require('stream');
@@ -241,19 +242,37 @@ var isCompiled = false;
                       }, function (err, data, container) {
                           if (err) {
                               res.send({
-                                  compilerState: JSON.stringify(err),
+                                  compilerState: 'bab(0): ' + SON.stringify(err),
                                   uStatusState
                                 });
                             } 
                           else {
-                              isCompiled = true;
-                              
-                              res.send({
-                                  compilerState: "Compilation Ok",
-                                  uStatusState
-                              });
-                            }
+					container.inspect(function (err, data) {
+					  oFS.readFile(data.LogPath, 'utf8', function(err,data){                //reading log file(JSON) for the output,
+					  var strLines = data.split("\n");
+					  var strData = []
+					  for(var i=0; i<strLines.length-1; i++) {
+					  	var obj = JSON.parse(strLines[i]);
+					    	strData[i] = obj.log;
+					  }
+					  if(strData == "") {
+						compilerState = 'Compilation OK';
+					   }
+					  else {	
+						compilerState = strData; 
+					   }
+
+					res.send({
+                                                compilerState,
+                                                uStatusState
+						});
+
+					   });
+					});
+                           	 }
+
                       });
+	 	  }
               });
           });
     });
@@ -356,8 +375,12 @@ var isCompiled = false;
                                           });
                                         });
                                       }
+					//container.remove(function (err, data) {
+  					//console.log(data);
+					//});				
+	
                                   });
-                                }
+                               }
                         });                         
                     });
           });

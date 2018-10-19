@@ -187,7 +187,7 @@ function btnCompile() {
         data: { docID: sDocumentID},
         success: function(response) {
          $('#status-state').text(response.uStatusState);	      
-	 $('#compiler-state').text(response.compilerState);   
+	 $('#executes-output').text(response.compilerState);   
         },
 
         error: console.error
@@ -196,7 +196,7 @@ function btnCompile() {
         setTimeout(function(){
 	var updateStatusState = 'Idle';
 	$("#status-state").text(updateStatusState);
-	},5000);
+	},3000);
       });
 }
 
@@ -218,7 +218,7 @@ function btnRun() {
         setTimeout(function(){
         var updateStatusState = 'Idle';
         $("#status-state").text(updateStatusState);
-        },5000);
+        },3000);
       });
 
 }
