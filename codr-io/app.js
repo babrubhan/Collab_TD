@@ -181,14 +181,14 @@ oApp.configure(function()
     });
 });
 
-var uStatusState;
 var isCompiled = false;  
 
 /* compiling file*/    
   oApp.post('/compilecode' , function (req , res ) {
      
-      isCompiled = false;
-      uStatusState = "Compiling";
+      var isCompiled = false;
+      var uStatusState = "Compiling";
+      var compilerState;
       
       var oDocument;
       var code;
@@ -242,13 +242,25 @@ var isCompiled = false;
                       }, function (err, data, container) {
                           if (err) {
                               res.send({
-                                  compilerState: 'bab(0): ' + SON.stringify(err),
+                                  compilerState: 'bab(0): ' + JSON.stringify(err),
                                   uStatusState
                                 });
                             } 
                           else {
 					container.inspect(function (err, data) {
-					  oFS.readFile(data.LogPath, 'utf8', function(err,data){                //reading log file(JSON) for the output,
+					if (err) {
+		                        	res.send({
+                   			            	compilerState: 'bab(a): ' + JSON.stringify(err),
+                                 			uStatusState
+                               				 });
+						}
+					oFS.readFile(data.LogPath, 'utf8', function(err,data){                //reading log file(JSON) for the output,
+					 if (err) {
+                                                res.send({
+                                                        compilerState: 'bab(b): ' + JSON.stringify(err),
+                                                        uStatusState
+                                                         });
+                                                }
 					  var strLines = data.split("\n");
 					  var strData = []
 					  for(var i=0; i<strLines.length-1; i++) {
@@ -271,7 +283,7 @@ var isCompiled = false;
 					});
                            	 }
 
-                      });
+                      	});//docker compile ends
 	 	  }
               });
           });
@@ -280,7 +292,8 @@ var isCompiled = false;
  /* Running file */
   oApp.post('/runcode' , function (req , res ) {
   
-      uStatusState = "Running";
+      var uStatusState = "Running";
+      var compilerState;
  
       var oDocument;
       var code;
@@ -338,8 +351,32 @@ var isCompiled = false;
                                   uStatusState
                                 });
                               } 
-                          else {
-                                //Run command
+
+	 		container.inspect(function (err, data) {
+                         if (err) {
+                         	res.send({
+                               		compilerState: 'bab(a): ' + JSON.stringify(err),
+                                	uStatusState
+                              		});
+                         	}
+                 	oFS.readFile(data.LogPath, 'utf8', function(err,data){                //reading log file(JSON) for the output,
+                      	if (err) {
+                        	res.send({
+                         		compilerState: 'bab(b): ' + JSON.stringify(err),
+                        		uStatusState
+                                        });
+                                }
+                        var strLines = data.split("\n");
+                        var strData = [];
+                        for(var i=0; i<strLines.length-1; i++) {
+                            var obj = JSON.parse(strLines[i]);
+                            strData[i] = obj.log;
+                          }
+
+			compilerState = strData;
+
+                          if(strData == "") {
+                     	//Run command
                                 docker.run('gccbox', dCommands.run, process.stdout, {
                                 'Volumes': {
                                 '/src': {}
@@ -357,7 +394,7 @@ var isCompiled = false;
                                       else {
                                           container.inspect(function (err, data) {
                                           oFS.readFile(data.LogPath, 'utf8', function(err,data){                //reading log file(JSON) for the output, 
-                                            if(err){                                                              //another way to do this is by using docker stream
+                                            if(err){                                                        //another way to do this is by using docker stream
                                               res.send({
                                                   compilerState: JSON.stringify(err),
                                                   uStatusState
@@ -366,25 +403,27 @@ var isCompiled = false;
                                             var objJSON = JSON.parse(data);
                                             var dResult = objJSON.log;
                                          
-                                            res.send({
-                                                compilerState: dResult,
-                                                uStatusState
-                                              });
-                                         // res.send(dResult);              //JSON.stringify                      //server response to the client side
-                                         
-                                          });
-                                        });
-                                      }
-					//container.remove(function (err, data) {
-  					//console.log(data);
-					//});				
-	
-                                  });
-                               }
-                        });                         
-                    });
-          });
-      });
+                                            compilerState = dResult;
+						res.send({ compilerState, uStatusState }); 
+                                            });
+                                      	  });
+                                     	 }
+                                  });//docker run ends
+			    }
+			  else {
+				res.send({
+					compilerState: strData, 
+					uStatusState
+				 	});
+			  	}
+
+			});
+		     });
+		});//docker compile ends
+
+	});
+     });
+});
 
 // Instantiate server.
 var oServer = oHTTP.createServer(oApp);
