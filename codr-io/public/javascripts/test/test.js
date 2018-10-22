@@ -1,15 +1,3 @@
-/*QUnit.test( "hello test", function( assert ) {
-  assert.ok( 1 == "1", "Passed!" );
-});
-
-function isEven(val) {
-    return val % 2 === 0;
-}
- 
-QUnit.test('isEven()', function(assert) {
-    assert.ok(isEven(0), 'Zero is an even number');
-})
-*/
 
 
 //Ajax req res testing
@@ -61,26 +49,4 @@ function getTheValues() {
     }
   });
 }
-
-//Docker testing
-QUnit.test("Docker Compiler", function (assert) {
-
-});
-
-function useDocker(){
-     var Docker = require('dockerode');
-     var docker = new Docker({socketPath: '/var/run/docker.sock'});     
-     var dPaths = { bind: ['/root/working_project/Collab_TD/codr-io/public/javascripts/test:/src'] };           
-                                                   
-       docker.run(dImage, dCommands.compile, process.stdout, {
-       'Volumes': {
-       '/src': {}
-         },
-       'Hostconfig': {
-       'Binds': dPaths.bind,
-           }
-       }, function (err, data, container) {
                                  
-         }
-       );
-}

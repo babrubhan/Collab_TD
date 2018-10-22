@@ -211,7 +211,7 @@ var isCompiled = false;
           oFS.writeFile(cFilepath + 'sourceCode.c', code, function(err) {        //creating the seperate folder for each client by using the client-id
               if(err){
                   res.send({
-                        compilerState: 'bab(1): ' + JSON.stringify(err),
+                        compilerState: JSON.stringify(err),
                         uStatusState
                       });
                 }
@@ -242,7 +242,7 @@ var isCompiled = false;
                       }, function (err, data, container) {
                           if (err) {
                               res.send({
-                                  compilerState: 'bab(0): ' + JSON.stringify(err),
+                                  compilerState: JSON.stringify(err),
                                   uStatusState
                                 });
                             } 
@@ -250,14 +250,14 @@ var isCompiled = false;
 					container.inspect(function (err, data) {
 					if (err) {
 		                        	res.send({
-                   			            	compilerState: 'bab(a): ' + JSON.stringify(err),
+                   			            	compilerState: JSON.stringify(err),
                                  			uStatusState
                                				 });
 						}
 					oFS.readFile(data.LogPath, 'utf8', function(err,data){                //reading log file(JSON) for the output,
 					 if (err) {
                                                 res.send({
-                                                        compilerState: 'bab(b): ' + JSON.stringify(err),
+                                                        compilerState: JSON.stringify(err),
                                                         uStatusState
                                                          });
                                                 }
@@ -366,7 +366,7 @@ var isCompiled = false;
                         		uStatusState
                                         });
                                 }
-                        var strLines = data.split("\n");
+                        var strLines = data.split("\n");				//JSON parse and store the err in a array
                         var strData = [];
                         for(var i=0; i<strLines.length-1; i++) {
                             var obj = JSON.parse(strLines[i]);
