@@ -1,1 +1,5 @@
-FROM gcc:4.9
+FROM ubuntu
+
+RUN echo test
+
+CMD ["bash"]
