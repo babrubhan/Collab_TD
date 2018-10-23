@@ -181,8 +181,7 @@ oApp.configure(function()
     });
 });
 
-var isCompiled = false;  
-
+//Write code file 
 function writeFile(sDocumentID, code, cb) {
 	cFilePath = './temp/' + sDocumentID + '/';       
 	oFS.exists( cFilePath, function(exists){                            
@@ -191,59 +190,61 @@ function writeFile(sDocumentID, code, cb) {
               oFS.mkdirSync(cFilePath);
           }
           
-          oFS.writeFile(cFilePath + 'sourceCode.c', code, function(err) {        //creating the seperate folder for each client by using the client-id
-              if(err){
-                  cb( {compilerState: JSON.stringify(err) });
+        oFS.writeFile(cFilePath + 'sourceCode.c', code, function(err) {		//seperate folder for each client by using client-id
+           if(err){
+                cb( {compilerState: JSON.stringify(err) });
                 }	
-		cb();
- 	  });
-        });
+	cb();
+
+ 	});
+      });
 }
 
+//Compile Code File
 function compileCode(image, commands, bindPath, cb){
 	var Docker = require('dockerode');
         var stream = require('stream');
         var docker = new Docker({socketPath: '/var/run/docker.sock'});
 
 	docker.run(image, commands, process.stdout, {
-                    'Volumes': {
-                      '/src': {}
-                      },
-                    'Hostconfig': {
-                    'Binds': bindPath,
-		   // 'AutoRemove': true
+           	'Volumes': {
+      		'/src': {}
+                    },
+                'Hostconfig': {
+               	'Binds': bindPath,
+	//	'AutoRemove': true
                       }
                       }, function (err, data, container) {
                           if (err) {
                               cb({ compilerState: JSON.stringify(err), isCompiled: false });
                             } 
                           else {
-					container.inspect(function (err, data) {
-					if (err) {
-						 cb({ compilerState: JSON.stringify(err), isCompiled: false });
-						}
-					oFS.readFile(data.LogPath, 'utf8', function(err,data){                //reading log file(JSON) for the output,
-					 if (err) {
-						 cb({ compilerState: JSON.stringify(err), isCompiled:false });
-                                                }
-					  var strLines = data.split("\n");
-					  var strData = [];
-					  for(var i=0; i<strLines.length-1; i++) {
-					  	var obj = JSON.parse(strLines[i]);
-					    	strData[i] = obj.log;
-					  }
-					  if(strData == "") {
-						compilerState = 'Compilation OK';
-						isCompiled = true;
-					   }
-					  else {	
-						compilerState = strData;	 
-						isCompiled = false;
-					   }
-					  cb(compilerState, isCompiled);
-					   });
-					});
-                           	 }
+				container.inspect(function (err, data) {
+				if (err) {
+					 cb({ compilerState: JSON.stringify(err), isCompiled: false });
+					}
+				oFS.readFile(data.LogPath, 'utf8', function(err,data){                //reading log file(JSON) for the output,
+				 if (err) {
+					 cb({ compilerState: JSON.stringify(err), isCompiled:false });
+					}
+				  var strLines = data.split("\n");
+				  var strData = [];
+				  for(var i=0; i<strLines.length-1; i++) {
+					var obj = JSON.parse(strLines[i]);
+					strData[i] = obj.log;
+				  }
+				  if(strData == "") {
+					compilerState = 'Compilation OK';
+					isCompiled = true;
+				   }
+				  else {	
+					compilerState = strData;	 
+					isCompiled = false;
+				   }
+				  cb(compilerState, isCompiled);
+				   });
+				});
+                            }
                       	});
 
 }
@@ -255,33 +256,44 @@ function runCode(image, commands, bindPath, cb) {
         var docker = new Docker({socketPath: '/var/run/docker.sock'});
 
 	docker.run(image, commands, process.stdout, {
-			'Volumes': {
-			'/src': {}
-			  },
-			'Hostconfig': {
-			'Binds': bindPath,
-			//'AutoRemove': true
-			  }
-			  }, function (err, data, container) {
-			     
-			      if (err) {
-				  cb({ compilerState: JSON.stringify(err) });
-				}
-			      else {
-				  container.inspect(function (err, data) {
-				  oFS.readFile(data.LogPath, 'utf8', function(err,data){                //reading log file(JSON) for the output, 
-				    if(err){ 
-					cb({ compilerState: JSON.stringify(err) });			//another way to do this is by using docker stream
-				      }
-				    var objJSON = JSON.parse(data);
-				    var dResult = objJSON.log;
-				 
-				    compilerState = dResult;
-					cb(compilerState); 
-				    });
-				  });
-				}
-			});
+		'Volumes': {
+		'/src': {}
+		  },
+		'Hostconfig': {
+		'Binds': bindPath,
+	//	'AutoRemove': true
+		  }
+		  }, function (err, data, container) {
+
+
+
+container.logs({ stream: true, follow: true, stdout: true, stderr: true }, function (error, dockerStream) {
+    if (error === null) {
+       var StringDecoder = require('string_decoder').StringDecoder;
+       var decoder = new StringDecoder('utf8');
+
+        dockerStream.on('data', function (chunk) {
+	compilerState = decoder.write(chunk);
+	cb(compilerState);
+
+        });
+    }
+});
+
+/*
+container.attach({stream: true, stdout: true, stderr: true}, function (err, stream) {
+
+stream.on('data', function(chunk, encoding, cb){
+console.log('b' + chunk.toString());
+cb();
+});
+stream.on('end',function () {
+console.log('complete data'); 
+})
+container.modem.demuxStream(stream, process.stdout, process.stderr);
+});
+*/
+     	});
 
 }
 
