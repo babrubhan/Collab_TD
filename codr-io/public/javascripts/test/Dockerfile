@@ -1,5 +1,2 @@
-FROM ubuntu
+FROM gcc:4.9
 
-RUN echo test
-
-CMD ["bash"]

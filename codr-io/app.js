@@ -193,12 +193,13 @@ oApp.configure(function()
            if(err){
                 cb( {cResult: JSON.stringify(err) });
            }	
-	   var dPath = '/root/working_project/collab_td/codr-io:/src';
-           var dImage = 'babru/gccbox';
-	   var codeFile = '/src/temp/' + sDocumentID + '/sourcecode.c';
-	   var outputFile = '/src/temp/' + sDocumentID + '/sourcecode';
+	   var config = { dPath: ['/root/working_project/collab_td/codr-io:/src'],
+			  dImage: ['babru/gccbox'],
+	    	 	  codeFile: ['/src/temp/' + sDocumentID + '/sourcecode.c'],
+	   		  outputFile: ['/src/temp/' + sDocumentID + '/sourcecode']
+		        };
 	
-	   cb(dPath, dImage, codeFile, outputFile);
+	   cb(config.dPath, config.dImage, config.codeFile, config.outputFile);
 
  	});
       });
@@ -238,7 +239,7 @@ oApp.configure(function()
 	    cb(cResult);
 	});
 	run.stderr.on('data', function (output) {
-	    storeOutput = String(output);//TODO run-time error fetch-up on UI
+	    storeOutput = String(output);//TODO run-time error
 	});
 	run.on('close', function (output) {
 	    console.log('stdout: ' + output);

@@ -200,7 +200,6 @@ function btnCompile() {
       });
 }
 
-
 //Run Button
 function btnRun() {
     var sDocumentID = /^(\/v)?\/([a-z0-9]+)\/?$/.exec(document.location.pathname)[2];
@@ -220,7 +219,6 @@ function btnRun() {
         $("#status-state").text(updateStatusState);
         },3000);
       });
-
 }
 
 // Start App.
