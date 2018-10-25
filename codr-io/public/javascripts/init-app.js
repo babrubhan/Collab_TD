@@ -186,8 +186,8 @@ function btnCompile() {
         url: '/compilecode',
         data: { docID: sDocumentID},
         success: function(response) {
-         $('#status-state').text(response.uStatusState);	      
-	 $('#executes-output').text(response.compilerState);   
+         $('#status-state').text(response.cState);	      
+	 $('#executes-output').text(response.cResult);   
         },
 
         error: console.error
@@ -209,8 +209,8 @@ function btnRun() {
         url: '/runcode',
         data: { docID: sDocumentID},
         success: function(response) {
-        $('#status-state').text(response.uStatusState);
-	$('#executes-output').text(response.compilerState);
+        $('#status-state').text(response.cState);
+	$('#executes-output').text(response.cResult);
         },
         error: console.error
     });
