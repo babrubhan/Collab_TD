@@ -193,7 +193,13 @@ oApp.configure(function()
            if(err){
                 cb( {cResult: JSON.stringify(err) });
            }	
-	   cb();
+	   var dPath = '/root/working_project/collab_td/codr-io:/src';
+           var dImage = 'babru/gccbox';
+	   var codeFile = '/src/temp/' + sDocumentID + '/sourcecode.c';
+	   var outputFile = '/src/temp/' + sDocumentID + '/sourcecode';
+	
+	   cb(dPath, dImage, codeFile, outputFile);
+
  	});
       });
    }
@@ -253,13 +259,9 @@ oApp.configure(function()
           code = oDocument.get('aLines').join('\r\n');
       };
 
-      writeFile(sDocumentID, code, function() {	                            
-	var dPath = '/root/working_project/collab_td/codr-io:/src';
-        var dImage = 'gccbox';
-	var codeFile = '/src/temp/' + sDocumentID + '/sourcecode.c';
-	var outputFile = '/src/temp/' + sDocumentID + '/sourcecode';
-        var dCommands = { compile: ['run', '-v', dPath, dImage, 'gcc', codeFile, '-o', outputFile],
-                          run: ['run', '-v', dPath, dImage, outputFile] };
+      writeFile(sDocumentID, code, function(dPath, dImage, codeFile, outputFile) {	                            
+
+        var dCommands = { compile: ['run', '--rm', '-v', dPath, dImage, 'gcc', codeFile, '-o', outputFile] };
 
 	compileCode(dCommands.compile, function(cResult, isCompiled) {
 		res.send({cResult, cState });
@@ -282,13 +284,10 @@ oApp.configure(function()
           code = oDocument.get('aLines').join('\r\n');
       };
 	
-      writeFile(sDocumentID, code, function() {
-	var dPath = '/root/working_project/collab_td/codr-io:/src';
-        var dImage = 'gccbox';
-	var codeFile = '/src/temp/' + sDocumentID + '/sourcecode.c';
-	var outputFile = '/src/temp/' + sDocumentID + '/sourcecode';
-        var dCommands = { compile: ['run', '-v', dPath, dImage, 'gcc', codeFile, '-o', outputFile],
-                          run: ['run', '-v', dPath, dImage, outputFile] };
+      writeFile(sDocumentID, code, function(dPath, dImage, codeFile, outputFile) {
+        
+	var dCommands = { compile: ['run', '--rm', '-v', dPath, dImage, 'gcc', codeFile, '-o', outputFile],
+                          run: ['run', '--rm', '-v', dPath, dImage, outputFile] };
 
 	compileCode(dCommands.compile, function(cResult, isCompiled) {
 	    if(isCompiled) {
