@@ -182,7 +182,7 @@ oApp.configure(function()
 });
 
 //Write code file fn
-function writeFile(sDocumentID, code, cb) {
+   function writeFile(sDocumentID, code, cb) {
 	cFilePath = './temp/' + sDocumentID + '/';       
 	oFS.exists( cFilePath, function(exists){                            
         if(!exists) {
@@ -196,10 +196,10 @@ function writeFile(sDocumentID, code, cb) {
 	   cb();
  	});
       });
-}
+   }
 
 //Docker compile code fn
-function compileCode(cmdCompile, cb) {
+   function compileCode(cmdCompile, cb) {
 	var spawn = require('child_process').spawn;
 	var compile = spawn('docker', cmdCompile);
 	var storeOutput;
@@ -211,53 +211,39 @@ function compileCode(cmdCompile, cb) {
 	});
 	compile.on('close', function (data) {
 	    if(data == 0) {
+		isCompiled = true;
 		cResult = "Compilation OK";
-		cb(cResult);
+		cb(cResult, isCompiled);
   	    }
 	    else {
+		isCompiled = false;
 		cResult = storeOutput;
-		cb(cResult);
+		cb(cResult, isCompiled);
 	    }
 	});
-}
+   }
 
 //Docker Run code fn
-function runCode(cmdCompile, cmdRun, cb) {
+   function runCode(cmdRun, cb) {
 	var spawn = require('child_process').spawn;
-	var compile = spawn('docker', cmdCompile);
-	var storeOutput;
-	compile.stdout.on('data', function (data) {
-	
+	var run = spawn('docker', cmdRun);
+	run.stdout.on('data', function (output) {
+	    cResult = String(output);
+	    cb(cResult);
 	});
-	compile.stderr.on('data', function (data) {
-	    console.log(String(data));
-	    storeOutput = String(data);
+	run.stderr.on('data', function (output) {
+	    storeOutput = String(output);//TODO run-time error fetch-up on UI
 	});
-	compile.on('close', function (data) {
-	  if (data === 0) {
-		var run = spawn('docker', cmdRun);
-		run.stdout.on('data', function (output) {
-		cResult = String(output);
-		cb(cResult);
-		});
-		run.stderr.on('data', function (output) {
-			storeOutput = String(output);//TODO run-time error fetch-up on UI
-		});
-		run.on('close', function (output) {
-		    console.log('stdout: ' + output);
-		});
-        }
-	  else {
-		cResult = storeOutput;
-		cb(cResult);
- 	 } 
+	run.on('close', function (output) {
+	    console.log('stdout: ' + output);
 	});
-}
+   }
 
 /* compiling file*/    
   oApp.post('/compilecode' , function (req , res ) {
       var cState = "Compiling";
       var cResult;
+      var isCompiled = false;
 
       var oDocument;
       var code;
@@ -268,14 +254,14 @@ function runCode(cmdCompile, cmdRun, cb) {
       };
 
       writeFile(sDocumentID, code, function() {	                            
-	var dPaths = '/root/working_project/collab_td/codr-io:/src';
+	var dPath = '/root/working_project/collab_td/codr-io:/src';
         var dImage = 'gccbox';
 	var codeFile = '/src/temp/' + sDocumentID + '/sourcecode.c';
 	var outputFile = '/src/temp/' + sDocumentID + '/sourcecode';
-        var dCommands = { compile: ['run', '-v', dPaths, dImage, 'gcc', codeFile, '-o', outputFile],
-                          run: ['run', '-v', dPaths, dImage, outputFile] };
+        var dCommands = { compile: ['run', '-v', dPath, dImage, 'gcc', codeFile, '-o', outputFile],
+                          run: ['run', '-v', dPath, dImage, outputFile] };
 
-	compileCode(dCommands.compile, function(cResult) {
+	compileCode(dCommands.compile, function(cResult, isCompiled) {
 		res.send({cResult, cState });
 	});
             
@@ -297,19 +283,26 @@ function runCode(cmdCompile, cmdRun, cb) {
       };
 	
       writeFile(sDocumentID, code, function() {
-	var dPaths = '/root/working_project/collab_td/codr-io:/src';
+	var dPath = '/root/working_project/collab_td/codr-io:/src';
         var dImage = 'gccbox';
 	var codeFile = '/src/temp/' + sDocumentID + '/sourcecode.c';
 	var outputFile = '/src/temp/' + sDocumentID + '/sourcecode';
-        var dCommands = { compile: ['run', '-v', dPaths, dImage, 'gcc', codeFile, '-o', outputFile],
-                          run: ['run', '-v', dPaths, dImage, outputFile] };
+        var dCommands = { compile: ['run', '-v', dPath, dImage, 'gcc', codeFile, '-o', outputFile],
+                          run: ['run', '-v', dPath, dImage, outputFile] };
 
-	runCode(dCommands.compile, dCommands.run, function(cResult) {
+	compileCode(dCommands.compile, function(cResult, isCompiled) {
+	    if(isCompiled) {
+		runCode(dCommands.run, function(cResult) {
+			res.send({cResult, cState });
+		});
+	    }
+	    else {
 		res.send({cResult, cState });
-	});
+	    }
+        });
 
-    });
-  });
+      });
+   });
 
 // Instantiate server.
 var oServer = oHTTP.createServer(oApp);
