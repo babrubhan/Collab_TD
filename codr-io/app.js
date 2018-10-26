@@ -211,18 +211,12 @@ oApp.configure(function()
 	var compile = spawn('docker', cmdCompile);
 	var cError;
 	compile.stdout.on('data', function (data) {
-
 	}); 
 	compile.stderr.on('data', function (data) {
-	    cError = String(data);//TODO fetch complete error
+	    cError = String(data);
 	});
-	compile.on('close', function (data) {
-	    if(data == 0) {
-		cb("Compilation OK", true);
-  	    }
-	    else {
-		cb(cError, false);
-	    }
+	compile.on('close', function (data) { 
+	    (data == 0) ? cb("Compilation OK", true) : cb(cError, false);
 	});
    }
 
@@ -238,12 +232,7 @@ oApp.configure(function()
 	   cErr = String(output);//TODO run time error
 	});
 	run.on('close', function (output) {
-	    if(output == 0) {
-		cb(cResult);
-	    }
-	    else {
-		cb(cErr);
-	    }
+	    (output == 0) ? cb(cResult) : cb(output);
 	});
    }
 
