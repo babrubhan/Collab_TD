@@ -209,23 +209,19 @@ oApp.configure(function()
    function compileCode(cmdCompile, cb) {
 	var spawn = require('child_process').spawn;
 	var compile = spawn('docker', cmdCompile);
-	var storeOutput;
+	var cError;
 	compile.stdout.on('data', function (data) {
 
 	}); 
 	compile.stderr.on('data', function (data) {
-	    storeOutput = String(data);//TODO fetch complete error
+	    cError = String(data);//TODO fetch complete error
 	});
 	compile.on('close', function (data) {
 	    if(data == 0) {
-		isCompiled = true;
-		cResult = "Compilation OK";
-		cb(cResult, isCompiled);
+		cb("Compilation OK", true);
   	    }
 	    else {
-		isCompiled = false;
-		cResult = storeOutput;
-		cb(cResult, isCompiled);
+		cb(cError, false);
 	    }
 	});
    }
@@ -234,15 +230,20 @@ oApp.configure(function()
    function runCode(cmdRun, cb) {
 	var spawn = require('child_process').spawn;
 	var run = spawn('docker', cmdRun);
+	var cErr;
 	run.stdout.on('data', function (output) {
 	    cResult = String(output);
-	    cb(cResult);
 	});
 	run.stderr.on('data', function (output) {
-	    storeOutput = String(output);//TODO run-time error
+	   cErr = String(output);//TODO run time error
 	});
 	run.on('close', function (output) {
-	    console.log('stdout: ' + output);
+	    if(output == 0) {
+		cb(cResult);
+	    }
+	    else {
+		cb(cErr);
+	    }
 	});
    }
 
