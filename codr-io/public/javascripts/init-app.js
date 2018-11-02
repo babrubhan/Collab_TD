@@ -178,6 +178,9 @@ window.addEventListener('load', function()
     }, );
 });
 
+var cState;
+var cResult;
+
 //Compile Button
 function btnCompile() {
     var sDocumentID = /^(\/v)?\/([a-z0-9]+)\/?$/.exec(document.location.pathname)[2];
@@ -186,18 +189,19 @@ function btnCompile() {
         url: '/compilecode',
         data: { docID: sDocumentID},
         success: function(response) {
-         $('#status-state').text(response.cState);	      
-	 $('#executes-output').text(response.cResult);   
+		cState = response.cState;
+                cResult = response.cResult;
+		sendResponse(response); 
         },
 
         error: console.error
     });
 	$(document).ajaxComplete(function(){
-        setTimeout(function(){
-	var updateStatusState = 'Idle';
-	$("#status-state").text(updateStatusState);
-	},3000);
-      });
+            setTimeout(function(){
+		var updateStatusState = 'Idle';
+		$("#status-state").text(updateStatusState);
+	    },3000);
+        });
 }
 
 //Run Button
@@ -208,17 +212,24 @@ function btnRun() {
         url: '/runcode',
         data: { docID: sDocumentID},
         success: function(response) {
-        $('#status-state').text(response.cState);
-	$('#executes-output').text(response.cResult);
+		cState = response.cState;
+		cResult = response.cResult;
+		sendResponse(response);
         },
         error: console.error
     });
 	$(document).ajaxComplete(function(){
-        setTimeout(function(){
-        var updateStatusState = 'Idle';
-        $("#status-state").text(updateStatusState);
-        },3000);
-      });
+            setTimeout(function(){
+        	var updateStatusState = 'Idle';
+        	$("#status-state").text(updateStatusState);
+            },3000);
+        });
+}
+
+//send responses
+function sendResponse(response) {
+	$('#status-state').text(response.cState);
+        $('#executes-output').text(response.cResult);
 }
 
 // Start App.

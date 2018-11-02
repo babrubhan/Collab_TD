@@ -47,7 +47,7 @@
     "mocha": "^5.2.0",
     "nock": "^10.0.0",
     "node-qunit-phantomjs": "^2.0.0",
-    "qunit": "^2.7.0",
+    "qunit": "^2.7.1",
     "request": "^2.88.0",
     "sinon": "^6.3.5"
   },

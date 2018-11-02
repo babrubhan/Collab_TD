@@ -1,0 +1,87 @@
+
+//Ajax req res testing
+var jsdom = require('jsdom');
+const { JSDOM } = jsdom;
+const { window } = new JSDOM();
+const { document } = (new JSDOM('')).window;
+global.document = document;
+
+var $ = jQuery = require('jquery')(window);
+
+var sinon = require('sinon');
+
+QUnit.module('Compile-Run', {
+  before: function () {
+    this.server = sinon.fakeServer.create();
+  },
+  after: function () {
+    this.server.restore();
+    delete this.server;
+  }
+});
+
+QUnit.test("Compile-Run buttons functionality", function (assert) {
+  var callback = sinon.spy(jQuery, "ajax");
+  this.server.respondWith("POST", "/compileRun",
+    [200, { "Content-Type": "application/json" },
+      '[{ "id": "BB250053" }]']);
+
+  var a = getTheValues();
+  this.server.respond();
+
+  assert.ok(callback.calledOnce, "Callback was called once");
+  var callArgs = callback.args[0][0];
+  assert.equal(JSON.stringify(callArgs.data), JSON.stringify({ "id": 'BB250053'}));
+});
+
+function getTheValues() {
+
+  $.ajax({
+    data: { id: 'BB250053' },
+    method: 'POST',
+    dataType: 'json',
+    cache: false,
+    url: '/compileRun',
+    success: function (data) {
+        alert(data);
+    }
+  });
+}
+
+
+function compile(cCmd, cb) {
+	var spawn = require('child_process').spawn;
+    var compile = spawn('docker', cCmd);
+		compile.stdout.on('data', function (data) {
+        });
+		compile.stderr.on('data', function (data) {
+        });
+		compile.on('close', function (data) {
+        	 (data == 0) ? cb("OKK") : cb("no");
+        });
+//	cb(cResult);
+}
+
+var fs = require('fs');
+function writeFile(cb) {
+	var config = {dPath: ['/root/working_project/collab_td/codr-io/public/javascript/test:/src'],
+				  dImage: ['babru/gccbox'],
+				  codeFile: ['/src/qq.c'],
+				  outputFile: ['/src/qq']
+				};
+           cb(config.dPath, config.dImage, config.codeFile, config.outputFile);
+} 
+
+QUnit.test("writeFile()", function(assert) {
+    var cResult;
+	var isCompiled = false;
+ 
+	writeFile(function(dPath, dImage, codeFile, outputFile) {
+		var dCmd = { compile: ['run', '--rm', '-v', dPath, dImage, 'gcc', codeFile, '-o', outputFile] };
+		
+		//compile(dCmd.compile, function(cResult, isCompiled)
+		compile(dCmd.compile, function(cResult) {
+			assert.equal(cResult, "OKK");
+		});
+  	});
+});

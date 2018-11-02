@@ -1,6 +1,7 @@
 // Dependencies
 var oHelpers = require('./public/javascripts/helpers/helpers-core');
 var applyDelta = require('./public/javascripts/apply-delta');
+//var oResults = require('./public/javascripts/init-app');
 
 // Document class
 module.exports = oHelpers.createClass(
@@ -25,7 +26,8 @@ module.exports = oHelpers.createClass(
             iTabSize: 4,
             bShowInvisibles: false,
             bUseWordWrap: false,
-            bAutoRefreshPreview: true
+            bAutoRefreshPreview: true,
+	    sResult: 'output'
         }
         if (optionalJSONorObj)
             this._load(optionalJSONorObj);

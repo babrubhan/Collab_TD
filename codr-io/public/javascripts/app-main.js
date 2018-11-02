@@ -75,7 +75,44 @@ define('app-main', function(require)
                 oEditor.replaceRegex(/<title>.*<\/title>/, '<title>' + sTitle + '</title>');
         }
     });
-    
+   
+    var oResultUIHandler = (
+    {
+	onEvent: function(oEvent)
+        {            
+            // Set title on ENTER / Click.
+            var sEventType = oEvent.type;
+            var jTarget = $(oEvent.target);
+            if ((sEventType == 'keydown' && oEvent.which == 13       ) || 
+                (sEventType == 'click'   && jTarget.is('btnCompile()')))
+            {
+                this._setResultToLocal();
+               var fs = document.getElementById("executes-output").value;
+                oEvent.preventDefault();
+            }
+        },
+
+	setResult: function(sResult)
+        {
+            //$('#toolbar-item-result .toolbar-item-selection').text(sResult);
+	    $('#result-save').text(sResult);
+            //$('#toolbar-item-result .toolbar-item-btn').attr('title', sResult);
+        },
+        
+        getResult: function()
+        {
+            $('#result-save').val();
+        },
+
+	_setResultToLocal: function()
+        {
+            var sResult = $('#result-save').val();
+            oSocket.send('setDocumentResult', { 'sResult': sResult });
+            this.setResult(sResult);
+            oUIDispatch.blurFocusedUIHandler();
+        }
+    });
+ 
     var oModeUIHandler = (
     {
         _oModeMenu:    null,
@@ -482,6 +519,10 @@ define('app-main', function(require)
             case 'setDocumentTitle':
                 oTitleUIHandler.setTitle(oAction.oData.sTitle);
                 break;
+
+	    case 'setDocumentResult':
+		oResultUIHandler.setResult(oAction.oData.sResult);
+		break;
                 
             case 'setMode':
                 var oMode = oModes.oModesByName[oAction.oData.sMode];
@@ -622,6 +663,7 @@ define('app-main', function(require)
         // Register dropdowns.
         new Dropdown('#toolbar-item-mode',                           oModeUIHandler);
         new Dropdown('#toolbar-item-title',                          oTitleUIHandler);
+        new Dropdown('#toolbar-item-result',                         oResultUIHandler);
         new Dropdown('#toolbar-item-download',                       oDownloadUIHandler);
         new Dropdown('#toolbar-item-link',                           oLinksUIHandler);
         new Dropdown('#toolbar-item-chat',                           oChatUIHandler);
@@ -640,6 +682,7 @@ define('app-main', function(require)
         
         // Bind shorctut handlers.
         oKeyShortcutHandler.registerShortcut('T', $('#toolbar-item-title'),     -15);
+        oKeyShortcutHandler.registerShortcut('B', $('#toolbar-item-result'),     -15);
         oKeyShortcutHandler.registerShortcut('L', $('#toolbar-item-mode'),      -15);
         oKeyShortcutHandler.registerShortcut('D', $('#toolbar-item-download'),  12);
         oKeyShortcutHandler.registerShortcut('F', $('#toolbar-item-fork'),      12);

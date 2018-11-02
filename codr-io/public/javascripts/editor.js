@@ -357,7 +357,6 @@ define(function(require)
                              .toggleClass('others-viewing', iNumViewers > 0);
         },
         
-        
         _onSelectionChange: function(oRange)
         {
             if (!oHelpers.objDeepEquals(this._oCurSelectionRange, oRange))

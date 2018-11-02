@@ -1,4 +1,3 @@
-
 //Ajax req res testing
 var jsdom = require('jsdom');
 const { JSDOM } = jsdom;
@@ -60,5 +59,3 @@ QUnit.test("compile()",function(assert) {
 		assert.equal(result, "OKK");
 	});
 }); 
-
-                              

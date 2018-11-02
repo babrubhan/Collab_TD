@@ -178,7 +178,7 @@ module.exports = oHelpers.createClass(
                 bUseSoftTabs: this._oDocument.get('bUseSoftTabs'),
                 iTabSize: this._oDocument.get('iTabSize'),
                 bShowInvisibles: this._oDocument.get('bShowInvisibles'),
-                bUseWordWrap: this._oDocument.get('bUseWordWrap')
+                bUseWordWrap: this._oDocument.get('bUseWordWrap'),
             });
             
             // Set mode (language.)
@@ -186,6 +186,12 @@ module.exports = oHelpers.createClass(
             {
                 sMode: this._oDocument.get('sMode')
             });
+
+	    //set Result(output)
+	    oClient.sendAction('setDocumentResult',
+	    {	
+		sResult: this._oDocument.get('sResult')
+	    });
             
             // Set title.
             oClient.sendAction('setDocumentTitle', 
@@ -280,7 +286,12 @@ module.exports = oHelpers.createClass(
             case 'setDocumentTitle':
                 this._broadcastAction(oClient, oAction);
                 this._oDocument.set('sTitle', oAction.oData.sTitle);
-				break;
+		break;
+
+	    case 'setDocumentResult':
+		this._broadcastAction(oClient, oAction);
+                this._oDocument.set('sResult', oAction.oData.sResult);
+                break;
             
             case 'docChange':
                 
