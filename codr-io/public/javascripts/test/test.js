@@ -48,14 +48,66 @@ function getTheValues() {
   });
 }
 
+$('#foo').on('click', function(){
+    $.getJSON('/load-foo', {
+        foo: 'bar'
+    }).done(function (foo) {
+        $('body').text(foo);
+    });
+});
 
-function compile(cb) {
-	var result = "OKK";
-	cb(result);
+QUnit.test('foo text via AJAX set on body after clicking #foo', function(assert) {
+    var $foo = $('#qunit-fixture').find('#foo');
+
+    // setup the expected request with the canned response
+    this.server.respondWith('/foo',
+        [ 200, { 'Content-Type': 'text/json' }, '"foobar"' ]
+    );
+
+    $foo.trigger('click');
+
+    // handle queued requests immediately
+    this.server.respond();
+
+    assert.equal($('body').text(), 'foobar');
+});
+
+
+//Write File Test
+function writefile(cb){
+	var config = { dPath: ['/home/babru/collab_td/codr-io/public/javascripts/test:/src'],
+        	       dImage: ['babru/gccbox'],
+        	       codeFile: ['/src/qq.c'],
+                       outputFile: ['/src/qq']
+	};
+	cb(config.dPath, config.dImage, config.codeFile, config.outputFile);
+}
+
+QUnit.test("writefile()", function (assert) {
+	writefile( function (path, image, file, output) {
+		assert.equal(image, "babru/gccbox");
+	});
+});
+
+//Compile Code (with Docker) Test
+/*function compile(cCmd, cb) {
+	var result = 0;
+	var spawn = require('child_process').spawn;
+        var compile = spawn('docker', cCmd);
+        compile.stdout.on('data', function (data) {
+        });
+        compile.stderr.on('data', function (data) {
+        });
+        compile.on('close', function (data) {
+            if (data == 0)
+		result = 1;
+        });
+	cb(String(result));
 }
 
 QUnit.test("compile()",function(assert) {
+
 	compile( function(result) {
-		assert.equal(result, "OKK");
+		assert.equal(result, 1);
 	});
-}); 
+});*/ 

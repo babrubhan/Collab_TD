@@ -95,18 +95,18 @@ define('app-main', function(require)
 	setResult: function(sResult)
         {
             //$('#toolbar-item-result .toolbar-item-selection').text(sResult);
-	    $('#result-save').text(sResult);
+	    $('#executes-output').text(sResult);
             //$('#toolbar-item-result .toolbar-item-btn').attr('title', sResult);
         },
         
         getResult: function()
         {
-            $('#result-save').val();
+            $('#executes-output').val();
         },
 
 	_setResultToLocal: function()
         {
-            var sResult = $('#result-save').val();
+            var sResult = $('#executes-output').val();
             oSocket.send('setDocumentResult', { 'sResult': sResult });
             this.setResult(sResult);
             oUIDispatch.blurFocusedUIHandler();
@@ -663,7 +663,6 @@ define('app-main', function(require)
         // Register dropdowns.
         new Dropdown('#toolbar-item-mode',                           oModeUIHandler);
         new Dropdown('#toolbar-item-title',                          oTitleUIHandler);
-        new Dropdown('#toolbar-item-result',                         oResultUIHandler);
         new Dropdown('#toolbar-item-download',                       oDownloadUIHandler);
         new Dropdown('#toolbar-item-link',                           oLinksUIHandler);
         new Dropdown('#toolbar-item-chat',                           oChatUIHandler);
@@ -682,7 +681,6 @@ define('app-main', function(require)
         
         // Bind shorctut handlers.
         oKeyShortcutHandler.registerShortcut('T', $('#toolbar-item-title'),     -15);
-        oKeyShortcutHandler.registerShortcut('B', $('#toolbar-item-result'),     -15);
         oKeyShortcutHandler.registerShortcut('L', $('#toolbar-item-mode'),      -15);
         oKeyShortcutHandler.registerShortcut('D', $('#toolbar-item-download'),  12);
         oKeyShortcutHandler.registerShortcut('F', $('#toolbar-item-fork'),      12);
