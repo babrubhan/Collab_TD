@@ -38,7 +38,7 @@ define('preview-standalone', function(require)
             oHelpers.setTitleWithHistory(oAction.oData.sTitle);
             return true;
         }
-        
+
         // Forward server messags to preview frame.
         oHtmlPreviewFrameConnector.sendMessage('serverMessage', oAction);
         

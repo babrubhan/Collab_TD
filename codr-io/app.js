@@ -193,7 +193,7 @@ oApp.configure(function()
            if(err){
                 cb( {cResult: JSON.stringify(err) });
            }	
-	   var config = { dPath: ['/home/babru/collab_td/codr-io:/src'],
+	   var config = { dPath: ['/home/babru/collab/codr-io:/src'],
 			  dImage: ['babru/gccbox'],
 	    	 	  codeFile: ['/src/temp/' + sDocumentID + '/sourcecode.c'],
 	   		  outputFile: ['/src/temp/' + sDocumentID + '/sourcecode']

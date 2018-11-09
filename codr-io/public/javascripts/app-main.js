@@ -35,7 +35,6 @@ define('app-main', function(require)
             {
                 this._setTitleToLocal();
                var fs = document.getElementById("title-save").value;
-                alert(fs);
                 oEvent.preventDefault();
             }
         },
@@ -66,6 +65,7 @@ define('app-main', function(require)
         _setTitleToLocal: function()
         {
             var sTitle = $('#title-input').val();
+            console.log(sTitle);
             oSocket.send('setDocumentTitle', { 'sTitle': sTitle });
             this.setTitle(sTitle);
             oUIDispatch.blurFocusedUIHandler();
@@ -78,37 +78,38 @@ define('app-main', function(require)
    
     var oResultUIHandler = (
     {
-	onEvent: function(oEvent)
+	    onEvent: function(oEvent)
         {            
             // Set title on ENTER / Click.
             var sEventType = oEvent.type;
             var jTarget = $(oEvent.target);
-            if ((sEventType == 'keydown' && oEvent.which == 13       ) || 
-                (sEventType == 'click'   && jTarget.is('btnCompile()')))
+            if ((sEventType == 'click'   && jTarget.is('#btn-compile')))
             {
                 this._setResultToLocal();
-               var fs = document.getElementById("executes-output").value;
+                var fs = document.getElementById('btn-compile').value;
                 oEvent.preventDefault();
             }
         },
 
-	setResult: function(sResult)
+	    setResult: function(sResult)
         {
-            //$('#toolbar-item-result .toolbar-item-selection').text(sResult);
-	    $('#executes-output').text(sResult);
-            //$('#toolbar-item-result .toolbar-item-btn').attr('title', sResult);
+            console.log(cResult + " a");
+	        $('#executes-output').text(cResult);
         },
         
         getResult: function()
         {
-            $('#executes-output').val();
+            return $('#executes-output').val();         //Not tested
         },
 
-	_setResultToLocal: function()
+	    _setResultToLocal: function()
         {
-            var sResult = $('#executes-output').val();
+            console.log("hsdl");
+            var sResult = cResult;
+            console.log(sResult + " b");
             oSocket.send('setDocumentResult', { 'sResult': sResult });
             this.setResult(sResult);
+            console.log(sResult + " c");
             oUIDispatch.blurFocusedUIHandler();
         }
     });
@@ -520,9 +521,9 @@ define('app-main', function(require)
                 oTitleUIHandler.setTitle(oAction.oData.sTitle);
                 break;
 
-	    case 'setDocumentResult':
-		oResultUIHandler.setResult(oAction.oData.sResult);
-		break;
+	        case 'setDocumentResult':
+		        oResultUIHandler.setResult(oAction.oData.sResult);
+		        break;
                 
             case 'setMode':
                 var oMode = oModes.oModesByName[oAction.oData.sMode];

@@ -40,6 +40,7 @@ module.exports = oHelpers.createClass(
     setClientID: function(sClientID)
     {
         this._sClientID = sClientID;
+	    console.log(sClientID);
     },
 
     getClientID: function()
@@ -190,3 +191,4 @@ module.exports = oHelpers.createClass(
         }
     }
 });
+
