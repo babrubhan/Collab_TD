@@ -99,6 +99,7 @@ define('app-main', function(require)
     	{
     	    var sDocumentID = /^(\/v)?\/([a-z0-9]+)\/?$/.exec(document.location.pathname)[2];
 	    var myThis = this;
+		$(myThis).toggleClass("active");
 	    $.ajax({
 		type: 'POST',
 	        url: '/compilecode',
@@ -137,7 +138,7 @@ define('app-main', function(require)
                 setTimeout(function(){
                     var updateStatusState = 'Idle';
                     myThis._setStateToLocal(updateStatusState);
-                },2000);
+                },500);
             });
         },
 
