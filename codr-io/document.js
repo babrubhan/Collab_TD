@@ -27,7 +27,8 @@ module.exports = oHelpers.createClass(
             bShowInvisibles: false,
             bUseWordWrap: false,
             bAutoRefreshPreview: true,
-	    sResult: 'output'
+	        sResult: 'Output',
+            sState: 'Idle'
         }
         if (optionalJSONorObj)
             this._load(optionalJSONorObj);

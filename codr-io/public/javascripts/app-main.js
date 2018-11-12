@@ -34,7 +34,7 @@ define('app-main', function(require)
                 (sEventType == 'click'   && jTarget.is('#title-save')))
             {
                 this._setTitleToLocal();
-               var fs = document.getElementById("title-save").value;
+                var fs = document.getElementById("title-save").value;
                 oEvent.preventDefault();
             }
         },
@@ -54,7 +54,7 @@ define('app-main', function(require)
                 document.title = sTitle;
             else
                 oHelpers.setTitleWithHistory(sTitle);
-            oDownloadUIHandler.updateName();
+                oDownloadUIHandler.updateName();
         },
         
         getTitle: function()
@@ -65,7 +65,6 @@ define('app-main', function(require)
         _setTitleToLocal: function()
         {
             var sTitle = $('#title-input').val();
-            console.log(sTitle);
             oSocket.send('setDocumentTitle', { 'sTitle': sTitle });
             this.setTitle(sTitle);
             oUIDispatch.blurFocusedUIHandler();
@@ -78,39 +77,94 @@ define('app-main', function(require)
    
     var oResultUIHandler = (
     {
-	    onEvent: function(oEvent)
-        {            
-            // Set title on ENTER / Click.
+        onEvent: function(oEvent)
+        {
             var sEventType = oEvent.type;
             var jTarget = $(oEvent.target);
-            if ((sEventType == 'click'   && jTarget.is('#btn-compile')))
+            if ((sEventType == 'keydown' && oEvent.which == 13       ) ||
+                (sEventType == 'click'   && jTarget.is('button#btnCompile')))
             {
-                this._setResultToLocal();
-                var fs = document.getElementById('btn-compile').value;
+                this.btnCompile();
+                oEvent.preventDefault();
+            }
+	    else if ((sEventType == 'keydown' && oEvent.which == 13       ) ||
+                    (sEventType == 'click'   && jTarget.is('button#btnRun')))
+            {
+                this.btnRun();
                 oEvent.preventDefault();
             }
         },
 
-	    setResult: function(sResult)
-        {
-            console.log(cResult + " a");
-	        $('#executes-output').text(cResult);
-        },
-        
-        getResult: function()
-        {
-            return $('#executes-output').val();         //Not tested
+   	btnCompile: function()
+    	{
+    	    var sDocumentID = /^(\/v)?\/([a-z0-9]+)\/?$/.exec(document.location.pathname)[2];
+	    var myThis = this;
+	    $.ajax({
+		type: 'POST',
+	        url: '/compilecode',
+	        data: { docID: sDocumentID},
+	        success: function(response)
+		{
+		    myThis._setStateToLocal(response.cState);
+	            myThis._setResultToLocal(response.cResult);
+		},
+		error: console.error
+	    });
+	    $(document).ajaxComplete(function(){
+                setTimeout(function(){
+        	    var updateStatusState = 'Idle';
+        	    myThis._setStateToLocal(updateStatusState);
+                },500);
+            });
         },
 
-	    _setResultToLocal: function()
+	btnRun: function()
         {
-            console.log("hsdl");
+            var sDocumentID = /^(\/v)?\/([a-z0-9]+)\/?$/.exec(document.location.pathname)[2];
+            var myThis = this;
+            $.ajax({
+                type: 'POST',
+                url: '/runcode',
+                data: { docID: sDocumentID},
+                success: function(response)
+                {
+                    myThis._setStateToLocal(response.cState);
+                    myThis._setResultToLocal(response.cResult);
+                },
+                error: console.error
+            });
+            $(document).ajaxComplete(function(){
+                setTimeout(function(){
+                    var updateStatusState = 'Idle';
+                    myThis._setStateToLocal(updateStatusState);
+                },2000);
+            });
+        },
+
+        _setResultToLocal: function(cResult)
+        {
             var sResult = cResult;
-            console.log(sResult + " b");
             oSocket.send('setDocumentResult', { 'sResult': sResult });
             this.setResult(sResult);
-            console.log(sResult + " c");
             oUIDispatch.blurFocusedUIHandler();
+        },
+
+	_setStateToLocal: function(cState)
+	{
+	    var sState  = cState;
+            oSocket.send('setDocumentState', { 'sState': sState });
+            this.setState(sState);
+            oUIDispatch.blurFocusedUIHandler();
+	},
+
+        setResult: function(sResult)
+        {
+            $('#executes-output').text(sResult);
+        },
+
+        setState: function(sState)
+        {
+            $('#status-state').text(sState);
         }
     });
  
@@ -521,9 +575,13 @@ define('app-main', function(require)
                 oTitleUIHandler.setTitle(oAction.oData.sTitle);
                 break;
 
-	        case 'setDocumentResult':
-		        oResultUIHandler.setResult(oAction.oData.sResult);
-		        break;
+	    case 'setDocumentResult':
+		 oResultUIHandler.setResult(oAction.oData.sResult);
+		 break;
+	
+	    case 'setDocumentState':
+                 oResultUIHandler.setState(oAction.oData.sState);
+                 break;
                 
             case 'setMode':
                 var oMode = oModes.oModesByName[oAction.oData.sMode];
@@ -671,8 +729,9 @@ define('app-main', function(require)
         new Dropdown('#toolbar-item-html-preview-dock',              oHtmlPreviewDockDropdownUIHandler);
         new Dropdown('#toolbar-item-html-preview-refresh-frequency', oHtmlPreviewRefreshFrequencyUIHandler);
         new Dropdown('#toolbar-item-fork');
-        new Dropdown('#toolbar-item-compile');
-        new Dropdown('#toolbar-item-output');
+        new Dropdown('#toolbar-item-compile',			     oResultUIHandler);
+        new Dropdown('#toolbar-item-run',			     oResultUIHandler);
+	new Dropdown('#toolbar-item-output');
         
         // Register other UI handlers.
         oUIDispatch.registerUIHandler(oHtmlPreviewPopupUIHandler);
@@ -685,8 +744,8 @@ define('app-main', function(require)
         oKeyShortcutHandler.registerShortcut('L', $('#toolbar-item-mode'),      -15);
         oKeyShortcutHandler.registerShortcut('D', $('#toolbar-item-download'),  12);
         oKeyShortcutHandler.registerShortcut('F', $('#toolbar-item-fork'),      12);
-        oKeyShortcutHandler.registerShortcut('X', $('#toolbar-item-compile'),   12);
-        oKeyShortcutHandler.registerShortcut('E', $('#toolbar-item-output'),   -15);
+        //oKeyShortcutHandler.registerShortcut('X', $('#toolbar-item-compile'),   -15);
+        //oKeyShortcutHandler.registerShortcut('E', $('#toolbar-item-run'),       -15);
         if (!bIsSnapshot)
         {
             oKeyShortcutHandler.registerShortcut('C', $('#toolbar-item-chat'),  12);

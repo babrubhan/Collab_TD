@@ -109,20 +109,24 @@
             <!-- --------------------------------------------------------------------------------------------- -->
             <div id="toolbar-item-compile" class="toolbar-item">
                 <div class="toolbar-item-btn">
-                    <div class="toolbar-item-compile">Compile</div>
+                    <div class="toolbar-item-compile">
+                        <button id="btnCompile">Compile</button> <!-- onclick="btnCompile()"-->
+                    </div>
                 </div>
                 <div class="toolbar-dropdown-top-border"></div>
-                <div class="toolbar-dropdown">
+                <!--<div class="toolbar-dropdown">
                     <div id="compiler-state"></div>
                     <button id="btn-compile" onclick="btnCompile()">Compile</button>
-                </div>
+		</div>-->
             </div>
             <div class="divider"></div>
 
 
             <div id="toolbar-item-run" class="toolbar-item">
-                <div class="toolbar-item-btn"  onclick="btnRun()">
-                    <div class="toolbar-item-run">Run</div>
+                <div class="toolbar-item-btn">
+                    <div class="toolbar-item-run">
+                        <button id="btnRun">Run</button>
+                    </div>
                 </div>
                 <div class="toolbar-dropdown-top-border"></div>
             </div>

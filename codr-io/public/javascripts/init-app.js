@@ -178,11 +178,9 @@ window.addEventListener('load', function()
     }, );
 });
 
-var cState;
-var cResult;
 
 //Compile Button
-function btnCompile() {
+/*function btnCompile() {
     var sDocumentID = /^(\/v)?\/([a-z0-9]+)\/?$/.exec(document.location.pathname)[2];
     $.ajax({
         type: 'POST',
@@ -230,7 +228,7 @@ function btnRun() {
 function sendResponse(response) {
 	$('#status-state').text(response.cState);
         $('#executes-output').text(response.cResult);
-}
+}*/
 
 // Start App.
 require(['init-app'], function(fnInitApp)
