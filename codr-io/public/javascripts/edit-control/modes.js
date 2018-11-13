@@ -13,7 +13,8 @@ define(function(require)
     var CodrMode = oHelpers.createClass(
     {
         _oAceMode: null,
-        _sDefaultExtension: 'cpp|c|cc|cxx|h|hh|hpp',
+        //_sDefaultExtension: 'c|cc|cxx|h|hh|hpp',
+        _sDefaultExtension: 'c',
         
         __init__: function(oAceMode)
         {
