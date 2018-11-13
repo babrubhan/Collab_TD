@@ -187,17 +187,17 @@ module.exports = oHelpers.createClass(
                 sMode: this._oDocument.get('sMode')
             });
 
-	        //set Result(output)
+	    //set Result(output)
             oClient.sendAction('setDocumentResult',
-	        {
-		        sResult: this._oDocument.get('sResult')
-	        });
+	    {
+		sResult: this._oDocument.get('sResult')
+	    });
 
             //set Satus Bar
             oClient.sendAction('setDocumentState',
-                {
-                    sState: this._oDocument.get('sState')
-                });
+            {
+                sState: this._oDocument.get('sState')
+            });
 
             // Set title.
             oClient.sendAction('setDocumentTitle', 
@@ -292,10 +292,10 @@ module.exports = oHelpers.createClass(
             case 'setDocumentTitle':
                 this._broadcastAction(oClient, oAction);
                 this._oDocument.set('sTitle', oAction.oData.sTitle);
-		        break;
+		break;
 
-	        case 'setDocumentResult':
-		        this._broadcastAction(oClient, oAction);
+	    case 'setDocumentResult':
+		this._broadcastAction(oClient, oAction);
                 this._oDocument.set('sResult', oAction.oData.sResult);
                 break;
 

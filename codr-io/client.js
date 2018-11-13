@@ -6,6 +6,7 @@ var Document    = require('./document');
 var oDatabase   = require('./database');
 
 var a_PREVIEW_ACTION_TYPES = ['setDocumentData', 'docChange', 'setDocumentTitle', 'setDocumentResult', 'setDocumentState', 'error', 'setAutoRefreshPreview', 'refreshPreview'];
+var client_id = null;
 
 module.exports = oHelpers.createClass(
 {
@@ -40,7 +41,7 @@ module.exports = oHelpers.createClass(
     setClientID: function(sClientID)
     {
         this._sClientID = sClientID;
-	    console.log(sClientID);
+        client_id = sClientID;
     },
 
     getClientID: function()

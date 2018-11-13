@@ -15,7 +15,7 @@ define('init-app', function(require)
     '<!DOCTYPE html>',
     '<html lang="en">',
     '    <head>',
-    '        <title>codr.io</title>',
+    '        <title>collab</title>',
     '        <style type="text/css">',
     '            html, body, #main',
     '            {',

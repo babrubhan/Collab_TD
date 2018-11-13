@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>codr.io</title>
-    <link rel="shortcut icon" type="image/x-icon" sizes="32x32" href="/images/favicon.ico">
+    <title>Collab-Demo</title>
+    <link rel="shortcut icon" type="image/x-icon" sizes="32x32" href="">
     <link href='http://fonts.googleapis.com/css?family=Lobster+Two&text=codr' rel='stylesheet' type='text/css'>
     <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300' rel='stylesheet' type='text/css'>
     <link rel=StyleSheet href="/stylesheets/index.css" type="text/css" />
@@ -38,11 +38,10 @@
             <table id="home-content">
                 <tr>
                     <td>
-                        <div class="logo">codr</div>
+                        <div class="logo">collab</div>
                         <div class="logo-subtitle">A WHITEBOARD FOR CODE</div>
                         <div id="home-mode-menu"></div>
                         <br />
-                        <a href="https://www.patreon.com/alden">Support on Patreon!</a>
                     </td>
                 </tr>
             </table>
@@ -61,14 +60,14 @@
         <div id="toolbar-top">
 
             <!-- Logo Icon-->
-            <a id="toolbar-logo" href="http://codr.io/">
-                <span class="icon-cloud left-icon"></span>
-                <span class="icon-code left-icon"></span>
+            <a id="toolbar-logo">
+               <!-- <span class="icon-cloud left-icon"></span>
+                <span class="icon-code left-icon"></span>-->
             </a>
             <div class="divider"></div>
 
             <!-- Title Toolbar Item -->
-            <div id="toolbar-item-title" class="toolbar-item">
+            <!--<div id="toolbar-item-title" class="toolbar-item">
                 <div class="toolbar-item-btn">
                     <div class="toolbar-item-caption">Title</div>
                     <div class="toolbar-item-selection">Loading...</div>
@@ -86,7 +85,7 @@
                     </div>
                 </div>
             </div>
-            <div class="divider"></div>
+            <div class="divider"></div>-->
             
             <!-- Mode (Language) Toolbar Item -->
             <div id="toolbar-item-mode" class="toolbar-item">
@@ -107,44 +106,19 @@
                 HTML Tools <span class="icon-angle-down"></span><span class="icon-angle-up"></span>
             </div>
             <!-- --------------------------------------------------------------------------------------------- -->
-            <div id="toolbar-item-compile" class="toolbar-item">
-                <div class="toolbar-item-btn">
-                    <div class="toolbar-item-compile">
-                        <button id="btnCompile">Compile</button> <!-- onclick="btnCompile()"-->
-                    </div>
-                </div>
-                <div class="toolbar-dropdown-top-border"></div>
-                <!--<div class="toolbar-dropdown">
-                    <div id="compiler-state"></div>
-                    <button id="btn-compile" onclick="btnCompile()">Compile</button>
-		</div>-->
-            </div>
-            <div class="divider"></div>
 
-
-            <div id="toolbar-item-run" class="toolbar-item">
-                <div class="toolbar-item-btn">
-                    <div class="toolbar-item-run">
-                        <button id="btnRun">Run</button>
-                    </div>
-                </div>
-                <div class="toolbar-dropdown-top-border"></div>
-            </div>
-            <div class="divider"></div>
-
-	<!-- //TODO Hide button if there is no data --> 
-            <div id="toolbar-item-output" class="toolbar-item">
+	<!-- //TODO Hide button if there is no data -->
+          <!--  <div id="toolbar-item-output" class="toolbar-item">
                 <div class="toolbar-item-btn">
                     <div class="toolbar-item-output"><span class="icon icon-popup"></span> </div>
                 </div>
                 <div class="toolbar-dropdown-top-border"></div>
                 <div class="toolbar-dropdown">
                     <div class="horizontal-divider"></div>
-                    <button id="executes-output"></button>
+
                 </div>
             </div>
-            <div class="divider"></div>
-
+            <div class="divider"></div>-->
 
             <!-- --------------------------------------------------------------------------------------------------       -->
 
@@ -299,8 +273,43 @@
         </div>
         <div id="toolbar-left">
 
+            <!-- Compile Button -->
+            <div id="toolbar-item-compile" class="toolbar-item">
+                <div class="toolbar-item-btn">
+                    <div class="toolbar-item-compile">
+                        <button id="btnCompile">Compile</button> <!-- onclick="btnCompile()"-->
+                    </div>
+                </div>
+                <div class="toolbar-dropdown-left-border"></div>
+                <div class="toolbar-dropdown">
+                    <div class="horizontal-divider"></div>
+                    <button id="compile-output">The code is not Compiled yet!</button>
+		        </div>
+            </div>
+            <div class="divider"></div>
+
+            <!--Run Button -->
+            <div id="toolbar-item-run" class="toolbar-item">
+                <div class="toolbar-item-btn">
+                    <div class="toolbar-item-run">
+                        <button id="btnRun">Run</button>
+                    </div>
+                </div>
+                <div class="toolbar-dropdown-left-border"></div>
+                <div class="toolbar-dropdown">
+                    <div class="horizontal-divider"></div>
+                    <button id="run-output">The code is not Compiled yet!</button>
+                </div>
+            </div>
+            <div class="divider"></div>
+
+        </div>
+
+
+
+
             <!-- Chat Toolbar Item -->
-            <div id="toolbar-item-chat" class="toolbar-item" title="Chat">
+           <!-- <div id="toolbar-item-chat" class="toolbar-item" title="Chat">
                 <div class="toolbar-item-btn">
                     <span class="icon-comments left-icon"></span>
                     <div id="chat-unread-count" style="display: none;"></div>
@@ -323,10 +332,10 @@
                     </div>
                 </div>
             </div>
-            <div class="divider"></div>
+            <div class="divider"></div>-->
 
             <!-- Link Toolbar Item -->
-            <div id="toolbar-item-link" class="toolbar-item" title="Link">
+           <!-- <div id="toolbar-item-link" class="toolbar-item" title="Link">
                 <div class="toolbar-item-btn">
                     <span class="icon-link left-icon"></span>
                 </div>
@@ -345,10 +354,10 @@
                     <button class="share-button" id="snapshot-button">Create new snapshot</button>
                 </div>
             </div>
-            <div class="divider"></div>
+            <div class="divider"></div>-->
 
             <!-- Download Toolbar Item -->
-            <div id="toolbar-item-download" class="toolbar-item" title="Download">
+           <!-- <div id="toolbar-item-download" class="toolbar-item" title="Download">
                 <div class="toolbar-item-btn">
                     <span class="icon-download left-icon"></span>
                 </div>
@@ -359,10 +368,10 @@
                     <button id="download">Download</button>
                 </div>
             </div>
-            <div class="divider"></div>
+            <div class="divider"></div>-->
 
             <!-- Fork Toolbar Item -->
-            <div id="toolbar-item-fork" class="toolbar-item" title="Fork">
+            <!--<div id="toolbar-item-fork" class="toolbar-item" title="Fork">
                 <div class="toolbar-item-btn">
                     <span class="icon-code-fork left-icon"></span>
                 </div>
@@ -380,8 +389,9 @@
                     </form>
                 </div>
             </div>
-            <div class="divider"></div>
-        </div>
+            <div class="divider"></div>-->
+
+
         <div id="edit-wrap">
             <div id="edit"></div>
             <div id="html-preview-wrap" class="none">

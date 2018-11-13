@@ -37,7 +37,7 @@ Mode.prototype.supportsFile = function(filename) {
     return filename.match(this.extRe);
 };
 var supportedModes = {
-    ABAP:        ["abap"],
+    /*ABAP:        ["abap"],
     ActionScript:["as"],
     ADA:         ["ada|adb"],
     Apache_Conf: ["^htaccess|^htgroups|^htpasswd|^conf|htaccess|htgroups|htpasswd"],
@@ -45,16 +45,16 @@ var supportedModes = {
     Assembly_x86:["asm"],
     AutoHotKey:  ["ahk"],
     BatchFile:   ["bat|cmd"],
-    C9Search:    ["c9search_results"],
+    C9Search:    ["c9search_results"],*/
     C_Cpp:       ["cpp|c|cc|cxx|h|hh|hpp"],
-    Cirru:       ["cirru|cr"],
+    /*Cirru:       ["cirru|cr"],
     Clojure:     ["clj"],
     Cobol:       ["CBL|COB"],
     coffee:      ["coffee|cf|cson|^Cakefile"],
     ColdFusion:  ["cfm"],
-    CSharp:      ["cs"],
-    CSS:         ["css"],
-    Curly:       ["curly"],
+    CSharp:      ["cs"],*/
+    //CSS:         ["css"],
+   /* Curly:       ["curly"],
     D:           ["d|di"],
     Dart:        ["dart"],
     Diff:        ["diff|patch"],
@@ -70,15 +70,15 @@ var supportedModes = {
     HAML:        ["haml"],
     Handlebars:  ["hbs|handlebars|tpl|mustache"],
     Haskell:     ["hs"],
-    haXe:        ["hx"],
-    HTML:        ["html|htm|xhtml"],
-    HTML_Ruby:   ["erb|rhtml|html.erb"],
+    haXe:        ["hx"],*/
+   // HTML:        ["html|htm|xhtml"],
+  /*  HTML_Ruby:   ["erb|rhtml|html.erb"],
     INI:         ["ini|conf|cfg|prefs"],
     Jack:        ["jack"],
     Jade:        ["jade"],
-    Java:        ["java"],
-    JavaScript:  ["js|jsm"],
-    JSON:        ["json"],
+    Java:        ["java"],*/
+   // JavaScript:  ["js|jsm"],
+   /* JSON:        ["json"],
     JSONiq:      ["jq"],
     JSP:         ["jsp"],
     JSX:         ["jsx"],
@@ -96,9 +96,9 @@ var supportedModes = {
     Makefile:    ["^Makefile|^GNUmakefile|^makefile|^OCamlMakefile|make"],
     MATLAB:      ["matlab"],
     Markdown:    ["md|markdown"],
-    MEL:         ["mel"],
-    MySQL:       ["mysql"],
-    MUSHCode:    ["mc|mush"],
+    MEL:         ["mel"],*/
+   // MySQL:       ["mysql"],
+    /*MUSHCode:    ["mc|mush"],
     Nix:         ["nix"],
     ObjectiveC:  ["m|mm"],
     OCaml:       ["ml|mli"],
@@ -109,9 +109,9 @@ var supportedModes = {
     Powershell:  ["ps1"],
     Prolog:      ["plg|prolog"],
     Properties:  ["properties"],
-    Protobuf:    ["proto"],
-    Python:      ["py"],
-    R:           ["r"],
+    Protobuf:    ["proto"],*/
+   // Python:      ["py"],
+   /* R:           ["r"],
     RDoc:        ["Rd"],
     RHTML:       ["Rhtml"],
     Ruby:        ["rb|ru|gemspec|rake|^Guardfile|^Rakefile|^Gemfile"],
@@ -131,9 +131,9 @@ var supportedModes = {
     Stylus:      ["styl|stylus"],
     SVG:         ["svg"],
     Tcl:         ["tcl"],
-    Tex:         ["tex"],
-    Text:        ["txt"],
-    Textile:     ["textile"],
+    Tex:         ["tex"],*/
+    //Text:        ["txt"]
+    /*Textile:     ["textile"],
     Toml:        ["toml"],
     Twig:        ["twig"],
     Typescript:  ["ts|typescript|str"],
@@ -142,7 +142,7 @@ var supportedModes = {
     Verilog:     ["v|vh|sv|svh"],
     XML:         ["xml|rdf|rss|wsdl|xslt|atom|mathml|mml|xul|xbl"],
     XQuery:      ["xq"],
-    YAML:        ["yaml|yml"]
+    YAML:        ["yaml|yml"]*/
 };
 
 var nameOverrides = {

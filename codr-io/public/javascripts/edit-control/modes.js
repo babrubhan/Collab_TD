@@ -7,12 +7,13 @@ define(function(require)
         oAceModeList = require('./ace-ext-modelist');
     
     // Select favorite modes.
-    var aCodrFavModeNames = ['text', 'html', 'javascript', 'css', 'python', 'mysql'];
+   // var aCodrFavModeNames = ['text', 'html', 'javascript', 'css', 'python', 'mysql'];
+    //var aCodrFavModeNames = ['text'];
     
     var CodrMode = oHelpers.createClass(
     {
         _oAceMode: null,
-        _sDefaultExtension: 'txt',
+        _sDefaultExtension: 'cpp|c|cc|cxx|h|hh|hpp',
         
         __init__: function(oAceMode)
         {
@@ -51,10 +52,10 @@ define(function(require)
             return this._oAceMode.mode;
         },
         
-        isFavorite: function()
+        /*isFavorite: function()
         {
            return $.inArray(this.getName(), aCodrFavModeNames) != -1;
-        },
+        },*/
         
         getDefaultExtension: function()
         {
@@ -71,7 +72,7 @@ define(function(require)
     {
         // Push CodrMode (excluding favorites).
         var oCodrMode = new CodrMode(oAceModeList.modes[iModeOffset]);
-        if (!oCodrMode.isFavorite())
+        //if (!oCodrMode.isFavorite())
             aCodrModes.push(oCodrMode);
         
         // Map CodrMode by name.
@@ -79,21 +80,21 @@ define(function(require)
     }
     
     // Prefix favorite modes to list in order.
-    var aFavModes = [];
+    /*var aFavModes = [];
     for (var iNameOffset in aCodrFavModeNames)
     {
         var sName = aCodrFavModeNames[iNameOffset];
         var oCodrMode = oCodrModesByName[sName];
         aFavModes.push(oCodrMode);
     }
-    aCodrModes = aFavModes.concat(aCodrModes);
+    aCodrModes = aFavModes.concat(aCodrModes);*/
     
     // Return modes object.
     return { 
         
         aModes:            aCodrModes,
         oModesByName:      oCodrModesByName,
-        iNumFavoriteModes: aFavModes.length,
+       // iNumFavoriteModes: aFavModes.length,
         createModeMenu:    function(jParent, sBtnText, oScope, fnOnModeSelect)
         {
             return new Menu(
@@ -102,7 +103,7 @@ define(function(require)
                 jParent:             jParent,
                 sBtnText:            sBtnText,
                 sPlaceHolderText:    'Filter Languages',
-                iNumFavoriteOptions: this.iNumFavoriteModes,
+               // iNumFavoriteOptions: this.iNumFavoriteModes,
                 oScope:              null,
                 fnGetKey:            function(oMode) { return oMode.getName();         },
                 fnRenderOption:      function(oMode)

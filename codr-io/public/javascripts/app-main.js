@@ -77,6 +77,8 @@ define('app-main', function(require)
    
     var oResultUIHandler = (
     {
+        isCompile: false,
+
         onEvent: function(oEvent)
         {
             var sEventType = oEvent.type;
@@ -84,12 +86,14 @@ define('app-main', function(require)
             if ((sEventType == 'keydown' && oEvent.which == 13       ) ||
                 (sEventType == 'click'   && jTarget.is('button#btnCompile')))
             {
+                isCompile = true;
                 this.btnCompile();
                 oEvent.preventDefault();
             }
 	    else if ((sEventType == 'keydown' && oEvent.which == 13       ) ||
                     (sEventType == 'click'   && jTarget.is('button#btnRun')))
             {
+                isCompile = false;
                 this.btnRun();
                 oEvent.preventDefault();
             }
@@ -99,7 +103,6 @@ define('app-main', function(require)
     	{
     	    var sDocumentID = /^(\/v)?\/([a-z0-9]+)\/?$/.exec(document.location.pathname)[2];
 	    var myThis = this;
-		$(myThis).toggleClass("active");
 	    $.ajax({
 		type: 'POST',
 	        url: '/compilecode',
@@ -160,7 +163,13 @@ define('app-main', function(require)
 
         setResult: function(sResult)
         {
-            $('#executes-output').text(sResult);
+            if(isCompile){
+                $('#compile-output').text(sResult);
+            }
+            else{
+                $('#run-output').text(sResult);
+            }
+
         },
 
         setState: function(sState)
@@ -722,17 +731,17 @@ define('app-main', function(require)
         
         // Register dropdowns.
         new Dropdown('#toolbar-item-mode',                           oModeUIHandler);
-        new Dropdown('#toolbar-item-title',                          oTitleUIHandler);
-        new Dropdown('#toolbar-item-download',                       oDownloadUIHandler);
-        new Dropdown('#toolbar-item-link',                           oLinksUIHandler);
-        new Dropdown('#toolbar-item-chat',                           oChatUIHandler);
+       // new Dropdown('#toolbar-item-title',                          oTitleUIHandler);
+        //new Dropdown('#toolbar-item-download',                       oDownloadUIHandler);
+        //new Dropdown('#toolbar-item-link',                           oLinksUIHandler);
+        //new Dropdown('#toolbar-item-chat',                           oChatUIHandler);
         new Dropdown('#toolbar-item-html-template-insert',           oHtmlTemplateInsertUIHandler);
         new Dropdown('#toolbar-item-html-preview-dock',              oHtmlPreviewDockDropdownUIHandler);
         new Dropdown('#toolbar-item-html-preview-refresh-frequency', oHtmlPreviewRefreshFrequencyUIHandler);
-        new Dropdown('#toolbar-item-fork');
+        //new Dropdown('#toolbar-item-fork');
         new Dropdown('#toolbar-item-compile',			     oResultUIHandler);
         new Dropdown('#toolbar-item-run',			     oResultUIHandler);
-	new Dropdown('#toolbar-item-output');
+	//new Dropdown('#toolbar-item-output');
         
         // Register other UI handlers.
         oUIDispatch.registerUIHandler(oHtmlPreviewPopupUIHandler);
@@ -741,17 +750,19 @@ define('app-main', function(require)
         oUIDispatch.registerUIHandler(oHtmlPreviewDockSplitUIHandler);
         
         // Bind shorctut handlers.
-        oKeyShortcutHandler.registerShortcut('T', $('#toolbar-item-title'),     -15);
+        //oKeyShortcutHandler.registerShortcut('T', $('#toolbar-item-title'),     -15);
         oKeyShortcutHandler.registerShortcut('L', $('#toolbar-item-mode'),      -15);
-        oKeyShortcutHandler.registerShortcut('D', $('#toolbar-item-download'),  12);
-        oKeyShortcutHandler.registerShortcut('F', $('#toolbar-item-fork'),      12);
-        //oKeyShortcutHandler.registerShortcut('X', $('#toolbar-item-compile'),   -15);
-        //oKeyShortcutHandler.registerShortcut('E', $('#toolbar-item-run'),       -15);
-        if (!bIsSnapshot)
+        oKeyShortcutHandler.registerShortcut('X', $('#toolbar-item-compile'),   -15);
+        oKeyShortcutHandler.registerShortcut('E', $('#toolbar-item-run'),       -15);
+        //oKeyShortcutHandler.registerShortcut('D', $('#toolbar-item-download'),  12);
+        //oKeyShortcutHandler.registerShortcut('F', $('#toolbar-item-fork'),      12);
+
+        /*if (!bIsSnapshot)
         {
             oKeyShortcutHandler.registerShortcut('C', $('#toolbar-item-chat'),  12);
             oKeyShortcutHandler.registerShortcut('K', $('#toolbar-item-link'),  12);
-        }
+        }*/
+
         oKeyShortcutHandler.registerShortcut('I', $('#toolbar-item-html-template-insert'),           -2, 18);
         oKeyShortcutHandler.registerShortcut('O', $('#toolbar-item-html-preview-dock'),              -2, 18);
         oKeyShortcutHandler.registerShortcut('P', $('#toolbar-item-html-preview-popup'),             -2, 18);
