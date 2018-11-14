@@ -189,9 +189,9 @@ module.exports = oHelpers.createClass(
 
 	    //set Result(output)
             oClient.sendAction('setDocumentResult',
-	    {
-		sResult: this._oDocument.get('sResult')
-	    });
+	        {
+		        sResult: this._oDocument.get('sResult')
+	        });
 
             //set Compile Output
             oClient.sendAction('setDocumentCompile',

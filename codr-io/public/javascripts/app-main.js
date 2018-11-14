@@ -84,7 +84,6 @@ define('app-main', function(require)
             if ((sEventType == 'keydown' && oEvent.which == 13       ) ||
 		(sEventType == 'click'   && jTarget.is('button#btnCompile')))
             {
-		    console.log("clicked");
                 this.btnCompile();
                 oEvent.preventDefault();
             }
@@ -107,6 +106,7 @@ define('app-main', function(require)
 		{
 		    myThis._setStateToLocal(response.cState);
 	            myThis._setCompileToLocal(response.cResult);
+                //myThis._setOtherClientStatus(response.cState);
 		},
 		error: console.error
 	    });
@@ -114,7 +114,8 @@ define('app-main', function(require)
                 setTimeout(function(){
         	    var updateStatusState = 'Idle';
         	    myThis._setStateToLocal(updateStatusState);
-                },1000);
+        	    //myThis._setOtherClientStatus("iniC");
+                },3000);
             });
         },
 
@@ -130,6 +131,7 @@ define('app-main', function(require)
                 {
                     myThis._setStateToLocal(response.cState);
                     myThis._setResultToLocal(response.cResult);
+                    //myThis._setOtherClientStatus(response.cState);
                 },
                 error: console.error
             });
@@ -137,7 +139,8 @@ define('app-main', function(require)
                 setTimeout(function(){
                     var updateStatusState = 'Idle';
                     myThis._setStateToLocal(updateStatusState);
-                },1000);
+                    //myThis._setOtherClientStatus("iniR");
+                },3000);
             });
         },
 
@@ -157,17 +160,17 @@ define('app-main', function(require)
             oUIDispatch.blurFocusedUIHandler();
         },
 
-	_setStateToLocal: function(cState)
-	{
-	    var sState  = cState;
+	    _setStateToLocal: function(cState)
+	    {
+	        var sState  = cState;
             oSocket.send('setDocumentState', { 'sState': sState });
             this.setState(sState);
             oUIDispatch.blurFocusedUIHandler();
-	},
+	    },
 
-        disable: function()
+        setOCStatus: function(sState)
         {
-            $('#btnCompile').attr('disabled', true);
+            $('#comB').text(sState);
         },
 
         setResult: function(sResult)
@@ -601,8 +604,9 @@ define('app-main', function(require)
                 oResultUIHandler.setCompile(oAction.oData.sCompile);
                 break;
 	
-	    case 'setDocumentState':
+	        case 'setDocumentState':
                  oResultUIHandler.setState(oAction.oData.sState);
+                 oResultUIHandler.setOCStatus(oAction.oData.sState);
                  break;
                 
             case 'setMode':
