@@ -77,23 +77,19 @@ define('app-main', function(require)
    
     var oResultUIHandler = (
     {
-        isCompile: false,
-
         onEvent: function(oEvent)
         {
             var sEventType = oEvent.type;
             var jTarget = $(oEvent.target);
             if ((sEventType == 'keydown' && oEvent.which == 13       ) ||
-                (sEventType == 'click'   && jTarget.is('button#btnCompile')))
+		(sEventType == 'click'   && jTarget.is('button#btnCompile')))
             {
-                isCompile = true;
+		    console.log("clicked");
                 this.btnCompile();
                 oEvent.preventDefault();
             }
-	    else if ((sEventType == 'keydown' && oEvent.which == 13       ) ||
-                    (sEventType == 'click'   && jTarget.is('button#btnRun')))
+	    else if ((sEventType == 'click'   && jTarget.is('button#btnRun')))
             {
-                isCompile = false;
                 this.btnRun();
                 oEvent.preventDefault();
             }
@@ -101,7 +97,7 @@ define('app-main', function(require)
 
    	btnCompile: function()
     	{
-    	    var sDocumentID = /^(\/v)?\/([a-z0-9]+)\/?$/.exec(document.location.pathname)[2];
+	    var sDocumentID = /^(\/v)?\/([a-z0-9]+)\/?$/.exec(document.location.pathname)[2];
 	    var myThis = this;
 	    $.ajax({
 		type: 'POST',
@@ -110,7 +106,7 @@ define('app-main', function(require)
 	        success: function(response)
 		{
 		    myThis._setStateToLocal(response.cState);
-	            myThis._setResultToLocal(response.cResult);
+	            myThis._setCompileToLocal(response.cResult);
 		},
 		error: console.error
 	    });
@@ -118,7 +114,7 @@ define('app-main', function(require)
                 setTimeout(function(){
         	    var updateStatusState = 'Idle';
         	    myThis._setStateToLocal(updateStatusState);
-                },500);
+                },1000);
             });
         },
 
@@ -141,7 +137,7 @@ define('app-main', function(require)
                 setTimeout(function(){
                     var updateStatusState = 'Idle';
                     myThis._setStateToLocal(updateStatusState);
-                },500);
+                },1000);
             });
         },
 
@@ -153,6 +149,14 @@ define('app-main', function(require)
             oUIDispatch.blurFocusedUIHandler();
         },
 
+        _setCompileToLocal: function(cResult)
+        {
+            var sCompile = cResult;
+            oSocket.send('setDocumentCompile', { 'sCompile': sCompile });
+            this.setCompile(sCompile);
+            oUIDispatch.blurFocusedUIHandler();
+        },
+
 	_setStateToLocal: function(cState)
 	{
 	    var sState  = cState;
@@ -161,15 +165,19 @@ define('app-main', function(require)
             oUIDispatch.blurFocusedUIHandler();
 	},
 
+        disable: function()
+        {
+            $('#btnCompile').attr('disabled', true);
+        },
+
         setResult: function(sResult)
         {
-            if(isCompile){
-                $('#compile-output').text(sResult);
-            }
-            else{
-                $('#run-output').text(sResult);
-            }
+            $('#run-output').text(sResult);
+        },
 
+        setCompile: function(sCompile)
+        {
+            $('#compile-output').text(sCompile);
         },
 
         setState: function(sState)
@@ -588,6 +596,10 @@ define('app-main', function(require)
 	    case 'setDocumentResult':
 		 oResultUIHandler.setResult(oAction.oData.sResult);
 		 break;
+
+            case 'setDocumentCompile':
+                oResultUIHandler.setCompile(oAction.oData.sCompile);
+                break;
 	
 	    case 'setDocumentState':
                  oResultUIHandler.setState(oAction.oData.sState);

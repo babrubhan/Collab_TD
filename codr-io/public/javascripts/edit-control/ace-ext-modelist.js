@@ -132,7 +132,7 @@ var supportedModes = {
     SVG:         ["svg"],
     Tcl:         ["tcl"],
     Tex:         ["tex"],*/
-    //Text:        ["txt"]
+   // Text:        ["txt"]
     /*Textile:     ["textile"],
     Toml:        ["toml"],
     Twig:        ["twig"],

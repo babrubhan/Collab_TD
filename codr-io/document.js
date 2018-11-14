@@ -27,7 +27,8 @@ module.exports = oHelpers.createClass(
             bShowInvisibles: false,
             bUseWordWrap: false,
             bAutoRefreshPreview: true,
-	    sResult: 'The code is not Compiled yet!',
+	    sResult: 'Compile first!',
+            sCompile: 'Compile',
             sState: 'Idle'
         }
         if (optionalJSONorObj)

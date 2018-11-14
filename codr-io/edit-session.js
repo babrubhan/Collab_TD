@@ -193,6 +193,12 @@ module.exports = oHelpers.createClass(
 		sResult: this._oDocument.get('sResult')
 	    });
 
+            //set Compile Output
+            oClient.sendAction('setDocumentCompile',
+                {
+                    sCompile: this._oDocument.get('sCompile')
+                });
+
             //set Satus Bar
             oClient.sendAction('setDocumentState',
             {
@@ -297,6 +303,11 @@ module.exports = oHelpers.createClass(
 	    case 'setDocumentResult':
 		this._broadcastAction(oClient, oAction);
                 this._oDocument.set('sResult', oAction.oData.sResult);
+                break;
+
+            case 'setDocumentCompile':
+                this._broadcastAction(oClient, oAction);
+                this._oDocument.set('sCompile', oAction.oData.sCompile);
                 break;
 
             case 'setDocumentState':

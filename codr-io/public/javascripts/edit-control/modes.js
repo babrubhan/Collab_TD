@@ -8,7 +8,7 @@ define(function(require)
     
     // Select favorite modes.
    // var aCodrFavModeNames = ['text', 'html', 'javascript', 'css', 'python', 'mysql'];
-    //var aCodrFavModeNames = ['text'];
+    var aCodrFavModeNames = ['C_Cpp'];
     
     var CodrMode = oHelpers.createClass(
     {
