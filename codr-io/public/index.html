@@ -6,7 +6,22 @@
     <link href='http://fonts.googleapis.com/css?family=Lobster+Two&text=codr' rel='stylesheet' type='text/css'>
     <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300' rel='stylesheet' type='text/css'>
     <link rel=StyleSheet href="/stylesheets/index.css" type="text/css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<style>
+.buttonload {
+    background-color: #4CAF50; /* Green background */
+    border: none; /* Remove borders */
+    color: white; /* White text */
+    padding: 12px 24px; /* Some padding */
+    font-size: 16px; /* Set a font-size */
+}
 
+/* Add a right margin to each icon */
+.fa {
+    margin-left: -12px;
+    margin-right: 8px;
+}
+</style>
 </head>
 <body class="hidden">
 
@@ -279,12 +294,13 @@
                     <div class="toolbar-item-compile" id="comB">Compile
                         <!-- <button id="btnCompile">Compile</button>  onclick="btnCompile()"-->
                     </div>
+                    <i id loading style="float:right" class="fa fa-spinner fa-spin"></i>
                 </div>
                 <div class="toolbar-dropdown-left-border"></div>
                 <div class="toolbar-dropdown">
                     <div class="horizontal-divider"></div>
                         <p id="compile-output"></p>
-                    <button id="btnCompile">Compile</button>
+                    <button id="btnCompile" class="btn-compile">Compile</button>
 		        </div>
             </div>
             <div class="divider"></div>
@@ -307,7 +323,9 @@
 
         </div>
 
-
+<script type="text/javascript">
+	$("#loading").hide();
+</script>
 
 
             <!-- Chat Toolbar Item -->

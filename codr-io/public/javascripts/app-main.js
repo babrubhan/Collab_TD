@@ -94,27 +94,31 @@ define('app-main', function(require)
             }
         },
 
-   	btnCompile: function()
-    	{
-	    var sDocumentID = /^(\/v)?\/([a-z0-9]+)\/?$/.exec(document.location.pathname)[2];
-	    var myThis = this;
-	    $.ajax({
-		type: 'POST',
-	        url: '/compilecode',
-	        data: { docID: sDocumentID},
-	        success: function(response)
-		{
-		    myThis._setStateToLocal(response.cState);
-	            myThis._setCompileToLocal(response.cResult);
-                //myThis._setOtherClientStatus(response.cState);
-		},
-		error: console.error
-	    });
+   	btnCompile: function() {
+        var sDocumentID = /^(\/v)?\/([a-z0-9]+)\/?$/.exec(document.location.pathname)[2];
+        var myThis = this;
+        $.ajax({
+            type: 'POST',
+            url: '/compilecode',
+            data: {docID: sDocumentID},
+            success: function (response) {
+                myThis._setStateToLocal(response.cState);
+                myThis._setCompileToLocal(response.cResult);
+               // myThis._setUpdateForLocalClient("Local");
+            },
+            error: console.error
+        });
+        $(document).ajaxStart(function () {
+            $("#loading").show();
+        }).ajaxStop(function () {
+            $("#loading").hide();
+        });
 	    $(document).ajaxComplete(function(){
                 setTimeout(function(){
-        	    var updateStatusState = 'Idle';
-        	    myThis._setStateToLocal(updateStatusState);
-        	    //myThis._setOtherClientStatus("iniC");
+        	        var updateStatusState = 'Idle';
+        	        var updateLocalState =  'Compile';
+        	        myThis._setStateToLocal(updateStatusState);
+                    myThis._setUpdateForLocalClient(updateLocalState);
                 },3000);
             });
         },
@@ -131,7 +135,6 @@ define('app-main', function(require)
                 {
                     myThis._setStateToLocal(response.cState);
                     myThis._setResultToLocal(response.cResult);
-                    //myThis._setOtherClientStatus(response.cState);
                 },
                 error: console.error
             });
@@ -139,7 +142,6 @@ define('app-main', function(require)
                 setTimeout(function(){
                     var updateStatusState = 'Idle';
                     myThis._setStateToLocal(updateStatusState);
-                    //myThis._setOtherClientStatus("iniR");
                 },3000);
             });
         },
@@ -168,9 +170,15 @@ define('app-main', function(require)
             oUIDispatch.blurFocusedUIHandler();
 	    },
 
-        setOCStatus: function(sState)
+        /*_setUpdateForLocalClient: function(lcState)
         {
-            $('#comB').text(sState);
+            $('#comB').text(lcState);
+        },*/
+
+        setOtherClientStatus: function(sState)
+        {
+            //$('#comB').text(sState);
+            $("#loading").show();
         },
 
         setResult: function(sResult)
@@ -606,7 +614,7 @@ define('app-main', function(require)
 	
 	        case 'setDocumentState':
                  oResultUIHandler.setState(oAction.oData.sState);
-                 oResultUIHandler.setOCStatus(oAction.oData.sState);
+                 oResultUIHandler.setOtherClientStatus(oAction.oData.sState);
                  break;
                 
             case 'setMode':

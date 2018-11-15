@@ -199,12 +199,6 @@ module.exports = oHelpers.createClass(
                     sCompile: this._oDocument.get('sCompile')
                 });
 
-            //set Satus Bar
-            oClient.sendAction('setDocumentState',
-            {
-                sState: this._oDocument.get('sState')
-            });
-
             // Set title.
             oClient.sendAction('setDocumentTitle', 
             {
