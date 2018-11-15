@@ -178,7 +178,10 @@ define('app-main', function(require)
         setOtherClientStatus: function(sState)
         {
             //$('#comB').text(sState);
-            $("#loading").show();
+            if(sState == 'Idle')
+                $("#btnCompile").show();
+            else
+                $("#btnCompile").hide();
         },
 
         setResult: function(sResult)
