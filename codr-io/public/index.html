@@ -292,15 +292,15 @@
             <div id="toolbar-item-compile" class="toolbar-item">
                 <div class="toolbar-item-btn">
                     <div class="toolbar-item-compile" id="comB">Compile
-                        <!-- <button id="btnCompile">Compile</button>  onclick="btnCompile()"-->
+                         <button id="btnCompile"></button>
                     </div>
-                    <i id loading style="display:none; float:right;" class="fa fa-spinner fa-spin"></i>
+                    <i id="loadCompile" style="display:none; float:right;" class="fa fa-spinner fa-spin"></i>
                 </div>
                 <div class="toolbar-dropdown-left-border"></div>
                 <div class="toolbar-dropdown">
                     <div class="horizontal-divider"></div>
-                        <p id="compile-output"></p>
-                    <button id="btnCompile" class="btn-compile">Compile</button>
+                        <p id="compile-output">output</p>
+                    <!--<button id="btnCompile" class="btn-compile">Compile</button>-->
 		        </div>
             </div>
             <div class="divider"></div>
@@ -311,6 +311,7 @@
                     <div class="toolbar-item-run" id="runB">Run
                         <!--<button id="btnRun">Run</button>-->
                     </div>
+                    <i id="loadRun" style="display:none; float:right;" class="fa fa-spinner fa-spin"></i>
                 </div>
                 <div class="toolbar-dropdown-left-border"></div>
                 <div class="toolbar-dropdown">
@@ -322,10 +323,6 @@
             <div class="divider"></div>
 
         </div>
-
-<script type="text/javascript">
-	$("#loading").hide();
-</script>
 
 
             <!-- Chat Toolbar Item -->

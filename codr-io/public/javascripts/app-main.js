@@ -74,16 +74,18 @@ define('app-main', function(require)
                 oEditor.replaceRegex(/<title>.*<\/title>/, '<title>' + sTitle + '</title>');
         }
     });
-   
+
     var oResultUIHandler = (
     {
+        _jElem: $("#comB"),
         onEvent: function(oEvent)
         {
             var sEventType = oEvent.type;
             var jTarget = $(oEvent.target);
             if ((sEventType == 'keydown' && oEvent.which == 13       ) ||
-		(sEventType == 'click'   && jTarget.is('button#btnCompile')))
+		(sEventType == 'click'   && jTarget.is('#comB')))
             {
+               // $("#comB").hide();
                 this.btnCompile();
                 oEvent.preventDefault();
             }
@@ -92,6 +94,11 @@ define('app-main', function(require)
                 this.btnRun();
                 oEvent.preventDefault();
             }
+        },
+
+        setDisabled: function(bDisabled)
+        {
+            this._jElem.toggleClass('disabled', bDisabled);
         },
 
    	btnCompile: function() {
@@ -104,21 +111,20 @@ define('app-main', function(require)
             success: function (response) {
                 myThis._setStateToLocal(response.cState);
                 myThis._setCompileToLocal(response.cResult);
-               // myThis._setUpdateForLocalClient("Local");
             },
             error: console.error
         });
-        $(document).ajaxStart(function () {
-            $("#loading").show();
+        /*$(document).ajaxStart(function () {
+            $("#btnCompile").hide();
         }).ajaxStop(function () {
-            $("#loading").hide();
-        });
+            $("#btnCompile").show();
+        });*/
 	    $(document).ajaxComplete(function(){
                 setTimeout(function(){
         	        var updateStatusState = 'Idle';
-        	        var updateLocalState =  'Compile';
+        	        //var updateLocalState =  'Compile';
         	        myThis._setStateToLocal(updateStatusState);
-                    myThis._setUpdateForLocalClient(updateLocalState);
+                    //myThis._setUpdateForLocalClient(updateLocalState);
                 },3000);
             });
         },
@@ -175,13 +181,23 @@ define('app-main', function(require)
             $('#comB').text(lcState);
         },*/
 
-        setOtherClientStatus: function(sState)
+        setOtherClientCompileStatus: function(sState)
         {
             //$('#comB').text(sState);
-            if(sState == 'Idle')
+            if(sState == 'Idle') {
                 $("#btnCompile").show();
-            else
+                $("#btnRun").show();
+                document.getElementById("loadCompile").style.display = "none";
+                document.getElementById("loadRun").style.display = "none";
+            }
+            else if(sState == "Compiling") {
                 $("#btnCompile").hide();
+                document.getElementById("loadCompile").style.display = "";
+            }
+            else{
+                $("#btnRun").hide();
+                document.getElementById("loadRun").style.display = "";
+            }
         },
 
         setResult: function(sResult)
@@ -617,7 +633,8 @@ define('app-main', function(require)
 	
 	        case 'setDocumentState':
                  oResultUIHandler.setState(oAction.oData.sState);
-                 oResultUIHandler.setOtherClientStatus(oAction.oData.sState);
+                 oResultUIHandler.setOtherClientCompileStatus(oAction.oData.sState);
+                 oResultUIHandler.setOtherClientRunStatus(oAction.oData.sState);
                  break;
                 
             case 'setMode':
