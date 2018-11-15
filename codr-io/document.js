@@ -28,6 +28,8 @@ module.exports = oHelpers.createClass(
             bUseWordWrap: false,
             bAutoRefreshPreview: true,
 	        sResult: 'Compile first!',
+            sRunStatus: false,
+            sCompileStatus: false,
             sCompile: 'Compile fisrt',
             sState: 'Idle'
         }

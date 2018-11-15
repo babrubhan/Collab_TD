@@ -292,16 +292,16 @@ module.exports = oHelpers.createClass(
             case 'setDocumentTitle':
                 this._broadcastAction(oClient, oAction);
                 this._oDocument.set('sTitle', oAction.oData.sTitle);
-		break;
+		        break;
 
-	    case 'setDocumentResult':
-		this._broadcastAction(oClient, oAction);
-                this._oDocument.set('sResult', oAction.oData.sResult);
+	         case 'setDocumentResult':
+		        this._broadcastAction(oClient, oAction);
+                this._oDocument.set('sResult', oAction.oData.sResult, 'sRunStatus', oAction.oData.sRunStatus );
                 break;
 
             case 'setDocumentCompile':
                 this._broadcastAction(oClient, oAction);
-                this._oDocument.set('sCompile', oAction.oData.sCompile);
+                this._oDocument.set('sCompile', oAction.oData.sCompile, 'sCompileStatus', oAction.oData.sCompileStatus);
                 break;
 
             case 'setDocumentState':

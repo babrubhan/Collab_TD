@@ -291,8 +291,11 @@
             <!-- Compile Button -->
             <div id="toolbar-item-compile" class="toolbar-item">
                 <div class="toolbar-item-btn">
-                    <div class="toolbar-item-compile" id="comB">Compile
-                         <button id="btnCompile"></button>
+                    <div class="toolbar-item-compile">Compile
+                        <button id="btnCompile" style="float:right; padding:0; border: none; color:green; background: none;">
+                            <i id="compileOK" style="display:none;" class="fa fa-check-circle"></i>
+                            <i id="compileNotOK" style="display:none; color:red;" class="fa fa-times-circle"></i>
+                        </button>
                     </div>
                     <i id="loadCompile" style="display:none; float:right;" class="fa fa-spinner fa-spin"></i>
                 </div>
@@ -300,7 +303,6 @@
                 <div class="toolbar-dropdown">
                     <div class="horizontal-divider"></div>
                         <p id="compile-output">output</p>
-                    <!--<button id="btnCompile" class="btn-compile">Compile</button>-->
 		        </div>
             </div>
             <div class="divider"></div>
@@ -308,8 +310,11 @@
             <!--Run Button -->
             <div id="toolbar-item-run" class="toolbar-item">
                 <div class="toolbar-item-btn">
-                    <div class="toolbar-item-run" id="runB">Run
-                        <!--<button id="btnRun">Run</button>-->
+                    <div class="toolbar-item-run">Run
+                        <button id="btnRun" style="float:right; padding:0; border: none; color:green; background: none;">
+                            <i id="runOK" style="display:none;" class="fa fa-check-circle"></i>
+                            <i id="runNotOK" style="display:none; color:red;" class="fa fa-times-circle"></i>
+                        </button>
                     </div>
                     <i id="loadRun" style="display:none; float:right;" class="fa fa-spinner fa-spin"></i>
                 </div>
@@ -317,7 +322,6 @@
                 <div class="toolbar-dropdown">
                     <div class="horizontal-divider"></div>
                         <p id="run-output"></p>
-                    <button id="btnRun">Run</button>
                 </div>
             </div>
             <div class="divider"></div>

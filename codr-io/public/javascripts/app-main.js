@@ -77,59 +77,49 @@ define('app-main', function(require)
 
     var oResultUIHandler = (
     {
-        _jElem: $("#comB"),
         onEvent: function(oEvent)
         {
             var sEventType = oEvent.type;
             var jTarget = $(oEvent.target);
-            if ((sEventType == 'keydown' && oEvent.which == 13       ) ||
-		(sEventType == 'click'   && jTarget.is('#comB')))
+            if ((sEventType == 'click'   && jTarget.is('.toolbar-item-compile')))
             {
-               // $("#comB").hide();
                 this.btnCompile();
                 oEvent.preventDefault();
             }
-	    else if ((sEventType == 'click'   && jTarget.is('button#btnRun')))
+            else if ((sEventType == 'click'   && jTarget.is('.toolbar-item-run')))
             {
                 this.btnRun();
                 oEvent.preventDefault();
             }
         },
 
-        setDisabled: function(bDisabled)
-        {
-            this._jElem.toggleClass('disabled', bDisabled);
-        },
-
-   	btnCompile: function() {
-        var sDocumentID = /^(\/v)?\/([a-z0-9]+)\/?$/.exec(document.location.pathname)[2];
-        var myThis = this;
-        $.ajax({
-            type: 'POST',
-            url: '/compilecode',
-            data: {docID: sDocumentID},
-            success: function (response) {
-                myThis._setStateToLocal(response.cState);
-                myThis._setCompileToLocal(response.cResult);
-            },
-            error: console.error
-        });
+   	    btnCompile: function() {
+            var sDocumentID = /^(\/v)?\/([a-z0-9]+)\/?$/.exec(document.location.pathname)[2];
+            var myThis = this;
+            $.ajax({
+                type: 'POST',
+                url: '/compilecode',
+                data: {docID: sDocumentID},
+                success: function (response) {
+                    myThis._setStateToLocal(response.cState);
+                    myThis._setCompileToLocal(response.cResult, response.isCompiled);
+                },
+                error: console.error
+            });
         /*$(document).ajaxStart(function () {
             $("#btnCompile").hide();
         }).ajaxStop(function () {
             $("#btnCompile").show();
         });*/
-	    $(document).ajaxComplete(function(){
+	        $(document).ajaxComplete(function(){
                 setTimeout(function(){
         	        var updateStatusState = 'Idle';
-        	        //var updateLocalState =  'Compile';
         	        myThis._setStateToLocal(updateStatusState);
-                    //myThis._setUpdateForLocalClient(updateLocalState);
-                },3000);
+                },500);
             });
         },
 
-	btnRun: function()
+	    btnRun: function()
         {
             var sDocumentID = /^(\/v)?\/([a-z0-9]+)\/?$/.exec(document.location.pathname)[2];
             var myThis = this;
@@ -140,7 +130,7 @@ define('app-main', function(require)
                 success: function(response)
                 {
                     myThis._setStateToLocal(response.cState);
-                    myThis._setResultToLocal(response.cResult);
+                    myThis._setResultToLocal(response.cResult, response.isSuccessful);
                 },
                 error: console.error
             });
@@ -148,23 +138,25 @@ define('app-main', function(require)
                 setTimeout(function(){
                     var updateStatusState = 'Idle';
                     myThis._setStateToLocal(updateStatusState);
-                },3000);
+                },500);
             });
         },
 
-        _setResultToLocal: function(cResult)
+        _setResultToLocal: function(cResult, runStatus)
         {
             var sResult = cResult;
-            oSocket.send('setDocumentResult', { 'sResult': sResult });
-            this.setResult(sResult);
+            var sRunStatus = runStatus;
+            oSocket.send('setDocumentResult', { 'sResult': sResult, 'sRunStatus': sRunStatus });
+            this.setResult(sResult, sRunStatus);
             oUIDispatch.blurFocusedUIHandler();
         },
 
-        _setCompileToLocal: function(cResult)
+        _setCompileToLocal: function(cResult, isCompiled)
         {
             var sCompile = cResult;
-            oSocket.send('setDocumentCompile', { 'sCompile': sCompile });
-            this.setCompile(sCompile);
+            var sCompileStatus = isCompiled;
+            oSocket.send('setDocumentCompile', { 'sCompile': sCompile, 'sCompileStatus': sCompileStatus });
+            this.setCompile(sCompile, sCompileStatus);
             oUIDispatch.blurFocusedUIHandler();
         },
 
@@ -176,14 +168,8 @@ define('app-main', function(require)
             oUIDispatch.blurFocusedUIHandler();
 	    },
 
-        /*_setUpdateForLocalClient: function(lcState)
-        {
-            $('#comB').text(lcState);
-        },*/
-
         setOtherClientCompileStatus: function(sState)
         {
-            //$('#comB').text(sState);
             if(sState == 'Idle') {
                 $("#btnCompile").show();
                 $("#btnRun").show();
@@ -194,19 +180,37 @@ define('app-main', function(require)
                 $("#btnCompile").hide();
                 document.getElementById("loadCompile").style.display = "";
             }
-            else{
+            else {
                 $("#btnRun").hide();
                 document.getElementById("loadRun").style.display = "";
             }
         },
 
-        setResult: function(sResult)
+        setResult: function(sResult, sRunStatus)
         {
+            if(sRunStatus == true){
+                $("#runNotOK").hide();
+                $("#runOK").show();
+            }
+            else if (sRunStatus == false) {
+                $("#runOK").hide();
+                $("#runNotOK").show();
+            }
+
             $('#run-output').text(sResult);
         },
 
-        setCompile: function(sCompile)
+        setCompile: function(sCompile, sCompileStatus)
         {
+            if(sCompileStatus == true){
+                $("#compileNotOK").hide();
+                $("#compileOK").show();
+            }
+            else if(sCompileStatus == false) {
+                $("#compileOK").hide();
+                $("#compileNotOK").show();
+            }
+
             $('#compile-output').text(sCompile);
         },
 
@@ -623,18 +627,17 @@ define('app-main', function(require)
                 oTitleUIHandler.setTitle(oAction.oData.sTitle);
                 break;
 
-	    case 'setDocumentResult':
-		 oResultUIHandler.setResult(oAction.oData.sResult);
-		 break;
+	        case 'setDocumentResult':
+		        oResultUIHandler.setResult(oAction.oData.sResult, oAction.oData.sRunStatus);
+		        break;
 
             case 'setDocumentCompile':
-                oResultUIHandler.setCompile(oAction.oData.sCompile);
+                oResultUIHandler.setCompile(oAction.oData.sCompile, oAction.oData.sCompileStatus);
                 break;
 	
 	        case 'setDocumentState':
                  oResultUIHandler.setState(oAction.oData.sState);
                  oResultUIHandler.setOtherClientCompileStatus(oAction.oData.sState);
-                 oResultUIHandler.setOtherClientRunStatus(oAction.oData.sState);
                  break;
                 
             case 'setMode':

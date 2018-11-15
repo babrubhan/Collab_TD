@@ -227,12 +227,14 @@ oApp.configure(function()
 	var cErr;
 	run.stdout.on('data', function (output) {
 	    cResult = String(output);
+        isSuccessful = true;
 	});
 	run.stderr.on('data', function (output) {
 	   cErr = String(output);//TODO run time error
+        isSuccessful = false;
 	});
 	run.on('close', function (output) {
-	    (output == 0) ? cb(cResult) : cb(output);
+	    (output == 0) ? cb(cResult, isSuccessful) : cb(cErr, isSuccessful);
 	});
    }
 
@@ -240,7 +242,7 @@ oApp.configure(function()
   oApp.post('/compilecode' , function (req , res ) {
       var cState = "Compiling";
       var cResult;
-      var isCompiled = false;
+      var isCompiled = null;
 
       var oDocument;
       var code;
@@ -255,7 +257,7 @@ oApp.configure(function()
         var dCommands = { compile: ['run', '--rm', '-v', dPath, dImage, 'gcc', codeFile, '-o', outputFile] };
 
 	compileCode(dCommands.compile, function(cResult, isCompiled) {
-		res.send({cResult, cState });
+		res.send({cResult, cState, isCompiled });
 	});
             
       });
@@ -265,6 +267,7 @@ oApp.configure(function()
   oApp.post('/runcode' , function (req , res ) {
       var cState = "Running";
       var cResult;
+      var isSuccessful = null;
  
       var oDocument;
       var code;
@@ -277,17 +280,18 @@ oApp.configure(function()
 	
       writeFile(sDocumentID, code, function(dPath, dImage, codeFile, outputFile) {
         
-	var dCommands = { compile: ['run', '--rm', '-v', dPath, dImage, 'gcc', codeFile, '-o', outputFile],
+	    var dCommands = { compile: ['run', '--rm', '-v', dPath, dImage, 'gcc', codeFile, '-o', outputFile],
                           run: ['run', '--rm', '-v', dPath, dImage, outputFile] };
 
 	compileCode(dCommands.compile, function(cResult, isCompiled) {
 	    if(isCompiled) {
-		runCode(dCommands.run, function(cResult) {
-			res.send({cResult, cState });
+		runCode(dCommands.run, function(cResult, isSuccessful) {
+			res.send({cResult, cState, isSuccessful });
 		});
 	    }
 	    else {
-		res.send({cResult, cState });
+            isSuccessful = false;
+		    res.send({cResult, cState, isSuccessful });
 	    }
         });
 
