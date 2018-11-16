@@ -169,7 +169,7 @@ define('app-main', function(require)
             oUIDispatch.blurFocusedUIHandler();
 	    },
 
-        setOtherClientCompileStatus: function(sState)           //For Local Client Updates
+        setOtherClientCompileStatus: function(sState)           //For Local client Updates
         {
             if(sState == 'Idle') {
                 $("#btnCompile").show();

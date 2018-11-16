@@ -27,7 +27,7 @@ module.exports = oHelpers.createClass(
             bShowInvisibles: false,
             bUseWordWrap: false,
             bAutoRefreshPreview: true,
-	        sResult: 'Compile first!',
+	        sResult: 'Compile first',
             sRunStatus: false,
             sCompileStatus: false,
             sCompile: 'Compile fisrt',

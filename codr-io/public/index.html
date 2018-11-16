@@ -6,8 +6,10 @@
     <link href='http://fonts.googleapis.com/css?family=Lobster+Two&text=codr' rel='stylesheet' type='text/css'>
     <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300' rel='stylesheet' type='text/css'>
     <link rel=StyleSheet href="/stylesheets/index.css" type="text/css" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-<style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"> <!-- for spin loading/waiting icon only -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">  <!-- materialize check and cross icons only -->
+
+    <style>
 .buttonload {
     background-color: #4CAF50; /* Green background */
     border: none; /* Remove borders */
@@ -22,6 +24,7 @@
     margin-right: 8px;
 }
 </style>
+
 </head>
 <body class="hidden">
 
@@ -293,8 +296,10 @@
                 <div class="toolbar-item-btn">
                     <div class="toolbar-item-compile">Compile
                         <button id="btnCompile" style="float:right; padding:0; border: none; color:green; background: none;">
-                            <i id="compileOK" style="display:none;" class="fa fa-check-circle"></i>
-                            <i id="compileNotOK" style="display:none; color:red;" class="fa fa-times-circle"></i>
+                           <!-- <i id="compileOK" style="display:none;" class="fa fa-check-circle"></i>
+                             <i id="compileNotOK" style="display:none; color:red;" class="fa fa-times-circle"></i>-->
+                            <i id="compileOK" style="display:none;" class = "material-icons tiny">check_circle</i>
+                            <i id="compileNotOK" style="display:none; color:red;" class = "material-icons tiny">clear</i>
                         </button>
                     </div>
                     <i id="loadCompile" style="display:none; float:right;" class="fa fa-spinner fa-spin"></i>
@@ -312,8 +317,10 @@
                 <div class="toolbar-item-btn">
                     <div class="toolbar-item-run">Run
                         <button id="btnRun" style="float:right; padding:0; border: none; color:green; background: none;">
-                            <i id="runOK" style="display:none;" class="fa fa-check-circle"></i>
-                            <i id="runNotOK" style="display:none; color:red;" class="fa fa-times-circle"></i>
+                            <!--<i id="runOK" style="display:none;" class="fa fa-check-circle"></i>
+                            <i id="runNotOK" style="display:none; color:red;" class="fa fa-times-circle"></i>-->
+                            <i id="runOK" style="display:none;" class = "material-icons tiny">check_circle</i>
+                            <i id="runNotOK" style="display:none; color:red;" class = "material-icons tiny">clear</i>
                         </button>
                     </div>
                     <i id="loadRun" style="display:none; float:right;" class="fa fa-spinner fa-spin"></i>

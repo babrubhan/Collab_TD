@@ -578,5 +578,5 @@ module.exports = oHelpers.createClass(
     _assertDocumentLoaded: function()
     {
         oHelpers.assert(this._bDocumentLoaded, 'Document not yet initialized.');
-    }
+    },
 });

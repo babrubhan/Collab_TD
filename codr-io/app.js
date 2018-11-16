@@ -240,7 +240,6 @@ oApp.configure(function()
 
 /* compiling file*/    
   oApp.post('/compilecode' , function (req , res ) {
-      var cState = "Compiling";
       var cResult;
       var isCompiled = null;
 
@@ -257,7 +256,7 @@ oApp.configure(function()
         var dCommands = { compile: ['run', '--rm', '-v', dPath, dImage, 'gcc', codeFile, '-o', outputFile] };
 
 	compileCode(dCommands.compile, function(cResult, isCompiled) {
-		res.send({cResult, cState, isCompiled });
+		res.send({cResult, isCompiled });
 	});
             
       });
@@ -265,7 +264,6 @@ oApp.configure(function()
 
  // Running file 
   oApp.post('/runcode' , function (req , res ) {
-      var cState = "Running";
       var cResult;
       var isSuccessful = null;
  
@@ -286,12 +284,12 @@ oApp.configure(function()
 	compileCode(dCommands.compile, function(cResult, isCompiled) {
 	    if(isCompiled) {
 		runCode(dCommands.run, function(cResult, isSuccessful) {
-			res.send({cResult, cState, isSuccessful });
+			res.send({cResult, isSuccessful });
 		});
 	    }
 	    else {
             isSuccessful = false;
-		    res.send({cResult, cState, isSuccessful });
+		    res.send({cResult, isSuccessful });
 	    }
         });
 

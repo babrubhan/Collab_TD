@@ -48,31 +48,6 @@ function getTheValues() {
   });
 }
 
-$('#foo').on('click', function(){
-    $.getJSON('/load-foo', {
-        foo: 'bar'
-    }).done(function (foo) {
-        $('body').text(foo);
-    });
-});
-
-QUnit.test('foo text via AJAX set on body after clicking #foo', function(assert) {
-    var $foo = $('#qunit-fixture').find('#foo');
-
-    // setup the expected request with the canned response
-    this.server.respondWith('/foo',
-        [ 200, { 'Content-Type': 'text/json' }, '"foobar"' ]
-    );
-
-    $foo.trigger('click');
-
-    // handle queued requests immediately
-    this.server.respond();
-
-    assert.equal($('body').text(), 'foobar');
-});
-
-
 //Write File Test
 function writefile(cb){
 	var config = { dPath: ['/home/babru/collab_td/codr-io/public/javascripts/test:/src'],
@@ -90,24 +65,26 @@ QUnit.test("writefile()", function (assert) {
 });
 
 //Compile Code (with Docker) Test
-/*function compile(cCmd, cb) {
-	var result = 0;
+function compile(cCmd, cb) {
 	var spawn = require('child_process').spawn;
         var compile = spawn('docker', cCmd);
         compile.stdout.on('data', function (data) {
         });
         compile.stderr.on('data', function (data) {
         });
-        compile.on('close', function (data) {
-            if (data == 0)
-		result = 1;
-        });
-	cb(String(result));
+        compile.on('close', function (data) { 
+	    (data == 0) ? cb(true) : cb(false);
+	});
 }
 
 QUnit.test("compile()",function(assert) {
+    writefile( function (path, image, file, output) {
+	var dCommands = { compile: ['run', '--rm', '-v', path, image, 'gcc', file, '-o', output] };
+		compile(dCommands.compile, function(isCompiled) {
+			assert.ok(true, isCompiled);
+		});
+               
+        });
 
-	compile( function(result) {
-		assert.equal(result, 1);
-	});
-});*/ 
+
+}); 
