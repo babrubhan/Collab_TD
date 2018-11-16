@@ -94,51 +94,52 @@ define('app-main', function(require)
         },
 
    	    btnCompile: function() {
+            $("#compileNotOK").hide();
+            $("#compileOK").hide();
+            document.getElementById("loadCompile").style.display = "";                      //Loading compile Action
             var sDocumentID = /^(\/v)?\/([a-z0-9]+)\/?$/.exec(document.location.pathname)[2];
             var myThis = this;
+            var cState = "Compiling";               //Change State to compile
+            myThis._setStateToLocal(cState);
             $.ajax({
                 type: 'POST',
                 url: '/compilecode',
                 data: {docID: sDocumentID},
                 success: function (response) {
-                    myThis._setStateToLocal(response.cState);
                     myThis._setCompileToLocal(response.cResult, response.isCompiled);
                 },
                 error: console.error
             });
-        /*$(document).ajaxStart(function () {
-            $("#btnCompile").hide();
-        }).ajaxStop(function () {
-            $("#btnCompile").show();
-        });*/
 	        $(document).ajaxComplete(function(){
-                setTimeout(function(){
-        	        var updateStatusState = 'Idle';
-        	        myThis._setStateToLocal(updateStatusState);
-                },500);
-            });
+                document.getElementById("loadCompile").style.display = "none";
+                var updateStatusState = 'Idle';
+                myThis._setStateToLocal(updateStatusState);
+             });
         },
 
 	    btnRun: function()
         {
+            $("#runNotOK").hide();
+            $("#runOK").hide();
+            document.getElementById("loadRun").style.display = "";                  //Loading Run Action
             var sDocumentID = /^(\/v)?\/([a-z0-9]+)\/?$/.exec(document.location.pathname)[2];
             var myThis = this;
+            var cState = "Running";             //Change state to run
+            myThis._setStateToLocal(cState);
             $.ajax({
                 type: 'POST',
                 url: '/runcode',
                 data: { docID: sDocumentID},
                 success: function(response)
                 {
-                    myThis._setStateToLocal(response.cState);
                     myThis._setResultToLocal(response.cResult, response.isSuccessful);
                 },
                 error: console.error
             });
             $(document).ajaxComplete(function(){
-                setTimeout(function(){
-                    var updateStatusState = 'Idle';
-                    myThis._setStateToLocal(updateStatusState);
-                },500);
+                document.getElementById("loadRun").style.display = "none";
+                var updateStatusState = 'Idle';
+                myThis._setStateToLocal(updateStatusState);
             });
         },
 
@@ -168,7 +169,7 @@ define('app-main', function(require)
             oUIDispatch.blurFocusedUIHandler();
 	    },
 
-        setOtherClientCompileStatus: function(sState)
+        setOtherClientCompileStatus: function(sState)           //For Local Client Updates
         {
             if(sState == 'Idle') {
                 $("#btnCompile").show();
