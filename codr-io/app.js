@@ -96,7 +96,6 @@ oApp.configure(function()
         }
         
         var sDocumentID = req.params['DocumentID'];
-        //console.log(sDocumentID);
         if (sDocumentID in g_oEditSessions)
         {
             send(g_oEditSessions[sDocumentID].getDocument());
@@ -166,7 +165,6 @@ oApp.configure(function()
         if (sDocumentID in g_oEditSessions)
         {
             oDocument = g_oEditSessions[sDocumentID].getDocument();
-            //console.log(oDocument);
             // TODO: Determine correct line-ending client-side.
             res.send(oDocument.get('aLines').join('\r\n'));
         }
@@ -255,10 +253,9 @@ oApp.configure(function()
 
         var dCommands = { compile: ['run', '--rm', '-v', dPath, dImage, 'gcc', codeFile, '-o', outputFile] };
 
-	compileCode(dCommands.compile, function(cResult, isCompiled) {
-		res.send({cResult, isCompiled });
-	});
-            
+	    compileCode(dCommands.compile, function(cResult, isCompiled) {
+		    res.send({cResult, isCompiled });
+	    });
       });
    });
 
@@ -281,18 +278,17 @@ oApp.configure(function()
 	    var dCommands = { compile: ['run', '--rm', '-v', dPath, dImage, 'gcc', codeFile, '-o', outputFile],
                           run: ['run', '--rm', '-v', dPath, dImage, outputFile] };
 
-	compileCode(dCommands.compile, function(cResult, isCompiled) {
-	    if(isCompiled) {
-		runCode(dCommands.run, function(cResult, isSuccessful) {
-			res.send({cResult, isSuccessful });
-		});
-	    }
-	    else {
-            isSuccessful = false;
-		    res.send({cResult, isSuccessful });
-	    }
+	    compileCode(dCommands.compile, function(cResult, isCompiled) {
+	        if(isCompiled) {
+		        runCode(dCommands.run, function(cResult, isSuccessful) {
+			    res.send({cResult, isSuccessful });
+		        });
+	        }
+	        else {
+                isSuccessful = false;
+		        res.send({cResult, isSuccessful });
+	        }
         });
-
       });
    });
 
