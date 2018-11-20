@@ -207,7 +207,6 @@ oApp.configure(function()
    function compileCode(cmdCompile, cb) {
 	var spawn = require('child_process').spawn;
 	var compile = spawn('docker', cmdCompile);
-	var cError;
 	compile.stdout.on('data', function (data) {
 	}); 
 	compile.stderr.on('data', function (data) {
@@ -222,17 +221,14 @@ oApp.configure(function()
    function runCode(cmdRun, cb) {
 	var spawn = require('child_process').spawn;
 	var run = spawn('docker', cmdRun);
-	var cErr;
 	run.stdout.on('data', function (output) {
 	    cResult = String(output);
-        isSuccessful = true;
 	});
 	run.stderr.on('data', function (output) {
-	   cErr = String(output);//TODO run time error
-        isSuccessful = false;
+	   cResult = String(output);	//TODO run time error
 	});
 	run.on('close', function (output) {
-	    (output == 0) ? cb(cResult, isSuccessful) : cb(cErr, isSuccessful);
+	    (output == 0) ? cb(cResult, true) : cb(cResult, false);
 	});
    }
 
@@ -285,7 +281,7 @@ oApp.configure(function()
 		        });
 	        }
 	        else {
-                isSuccessful = false;
+                	isSuccessful = false;
 		        res.send({cResult, isSuccessful });
 	        }
         });

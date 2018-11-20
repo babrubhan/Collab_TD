@@ -1,7 +1,6 @@
 // Dependencies
 var oHelpers = require('./public/javascripts/helpers/helpers-core');
 var applyDelta = require('./public/javascripts/apply-delta');
-//var oResults = require('./public/javascripts/init-app');
 
 // Document class
 module.exports = oHelpers.createClass(
