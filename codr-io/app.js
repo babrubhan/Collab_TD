@@ -192,7 +192,7 @@ oApp.configure(function()
                 cb( {cResult: JSON.stringify(err) });
            }	
 	   var config = { dPath: ['/home/babru/collab/codr-io:/src'],
-			  dImage: ['babru/gccbox'],
+			  dImage: ['gccbox'],
 	    	 	  codeFile: ['/src/temp/' + sDocumentID + '/sourcecode.c'],
 	   		  outputFile: ['/src/temp/' + sDocumentID + '/sourcecode']
 		        };
@@ -221,14 +221,15 @@ oApp.configure(function()
    function runCode(cmdRun, cb) {
 	var spawn = require('child_process').spawn;
 	var run = spawn('docker', cmdRun);
+        cErr = "Run time error";             //temp solution: Have to remove
 	run.stdout.on('data', function (output) {
 	    cResult = String(output);
 	});
 	run.stderr.on('data', function (output) {
-	   cResult = String(output);	//TODO run time error
+	   cErr = String(output);	            //TODO run time error: flow is not even entering inside stderr block
 	});
 	run.on('close', function (output) {
-	    (output == 0) ? cb(cResult, true) : cb(cResult, false);
+	    (output == 0) ? cb(cResult, true) : cb(cErr, false);
 	});
    }
 
@@ -247,7 +248,7 @@ oApp.configure(function()
 
       writeFile(sDocumentID, code, function(dPath, dImage, codeFile, outputFile) {	                            
 
-        var dCommands = { compile: ['run', '--rm', '-v', dPath, dImage, 'gcc', codeFile, '-o', outputFile] };
+        var dCommands = { compile: ['run', '--rm', '-v', dPath, dImage, 'gcc', '-std=c17', codeFile, '-o', outputFile] };
 
 	    compileCode(dCommands.compile, function(cResult, isCompiled) {
 		    res.send({cResult, isCompiled });
@@ -271,13 +272,13 @@ oApp.configure(function()
 	
       writeFile(sDocumentID, code, function(dPath, dImage, codeFile, outputFile) {
         
-	    var dCommands = { compile: ['run', '--rm', '-v', dPath, dImage, 'gcc', codeFile, '-o', outputFile],
+	    var dCommands = { compile: ['run', '--rm', '-v', dPath, dImage, 'gcc', '-std=c17', codeFile, '-o', outputFile],
                           run: ['run', '--rm', '-v', dPath, dImage, outputFile] };
 
 	    compileCode(dCommands.compile, function(cResult, isCompiled) {
 	        if(isCompiled) {
 		        runCode(dCommands.run, function(cResult, isSuccessful) {
-			    res.send({cResult, isSuccessful });
+			        res.send({cResult, isSuccessful });
 		        });
 	        }
 	        else {

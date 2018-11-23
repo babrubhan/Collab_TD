@@ -1,5 +1,7 @@
 #include<stdio.h>
 int main(){
-	printf("Hello Docker log");
-	return 0;
+    int a =10,b;
+    b=a/0;
+    printf("%d ", b);
+    return 0;
 }

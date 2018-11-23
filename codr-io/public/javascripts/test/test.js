@@ -66,14 +66,15 @@ QUnit.test("writefile()", function (assert) {
 
 //Compile Code (with Docker) Test
 function compile(cCmd, cb) {
-	var spawn = require('child_process').spawn;
+	    var spawn = require('child_process').spawn;
         var compile = spawn('docker', cCmd);
         compile.stdout.on('data', function (data) {
+            console.log(String(data));
         });
         compile.stderr.on('data', function (data) {
         });
         compile.on('close', function (data) { 
-	    (data == 0) ? cb(true) : cb(false);
+	    (data == 0) ? cb(1) : cb(0);
 	});
 }
 
@@ -81,7 +82,7 @@ QUnit.test("compile()",function(assert) {
     writefile( function (path, image, file, output) {
 	var dCommands = { compile: ['run', '--rm', '-v', path, image, 'gcc', file, '-o', output] };
 		compile(dCommands.compile, function(isCompiled) {
-			assert.ok(true, isCompiled);
+			assert.equal(isCompiled, 1);
 		});
                
         });
